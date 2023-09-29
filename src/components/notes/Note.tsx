@@ -30,22 +30,22 @@ export interface NoteProps extends JSX.IntrinsicAttributes {
  */
 export const useNoteProps = (_note: NoteType = defaultNote()): NoteProps => {
     const [title, setTitle] = useState<string>(_note.title);
+    const [updated, setUpdated] = useState<number>(_note.updated);
     const [editable, setEditable] = useState<boolean>(_note.editable);
     const [entries, setEntries] = useState<(EntryType|GroupType)[]>(_note.entries);
     const noteRef = useRef<NoteType>(_note);
     const note = {
-        ...noteRef.current,
+        id: noteRef.current.id,
         title: title, 
+        created: noteRef.current.created, 
+        updated: updated, 
         editable: editable, 
         entries: entries
     };
 
     useEffect(() => {
-        // note.title = title;
-        // note.editable = editable;
-        note.updated = Date.now();
-        // note.entries = entries;
-    }, [note, title, editable, entries]);
+        setUpdated(Date.now());
+    }, [title, editable, entries]);
 
     return {
         note: note,

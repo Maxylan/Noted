@@ -100,7 +100,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                             }} />
                     ) : (entry.price ? 
                         (<>{ entry.price }</>): 
-                        (editable ? (<MoneyOffIcon className={['text-third', 'mr-2'].join(' ')}/>) : (<></>)))
+                        (editable ? (<MoneyOffIcon className={['text-highlight'].join(' ')}/>) : (<></>)))
                     }
             </span>
         </div>
