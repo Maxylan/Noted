@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { generateUUID, reduceEntries } from "../../utils/helpers";
 import { 
     Note as NoteType, 
@@ -43,17 +43,43 @@ export interface GroupProps extends JSX.IntrinsicAttributes {
  */
 export default function Group({group, editable, index, setEntries}: GroupProps): JSX.Element {
     const [expanded, setExpanded] = useState<boolean>(true);
+    const [titleIsBeingEdited, setTitleIsBeingEdited] = useState<boolean>(false);
     const [showDeleteGroupPrompt, setDeleteGroupPromptVisible] = useState<boolean>(false);
     const hidePrompt = () => setDeleteGroupPromptVisible(false),
           showPrompt = () => setDeleteGroupPromptVisible(true);
+    const titleInputRef = useRef<any>();
 
     useEffect(() => {
-    }, []);
+        if (titleIsBeingEdited) { titleInputRef.current?.focus(); }
+    }, [titleIsBeingEdited]);
+
+    const updateEntry = (key: keyof GroupType, value: any) => {
+        setEntries(oldEntries => {
+            let oldEntriesCopy = [...oldEntries];
+            let group = oldEntriesCopy[index];
+            ((group as GroupType)[key] as any) = value; // What??
+            return oldEntriesCopy;
+        });
+    }
 
     return (
         <div className={['GroupBody', 'text-xl', 'my-2', 'p-2', 'rounded-lg', 'shadow-sm'].join(' ')} style={{backgroundColor: group.color}}>
             <div className={['w-full', 'text-2xl'].join(' ')}>
-                <span>{group.title}</span>
+                <span onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}>
+                    {titleIsBeingEdited ? (
+                        <input 
+                            ref={titleInputRef}
+                            type='text' 
+                            defaultValue={group.title} 
+                            onBlur={(e) => {
+                                updateEntry('title', e.target.value);
+                                setTitleIsBeingEdited(false);
+                            }} />) : (
+                        <>
+                            {group.title}
+                        </>)
+                    }
+                </span>
                 <span 
                     className={['float-right', 'mr-2'].join(' ')}
                     onClick={() => setExpanded(old => !old)}>
