@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { generateUUID, reduceEntries } from "../../utils/helpers";
+import { generateUUID, isGroup, hasGroups, reduceEntries } from "../../utils/helpers";
 import { 
     defaultNote, 
     Note as NoteType, 
@@ -83,9 +83,8 @@ export default function Note(props: NoteProps): JSX.Element {
             </div>
             <div className={['NoteBody', 'text-xl', 'px-4', 'py-2', 'bg-secondary', 'rounded-lg', 'shadow-inner', 'shadow-inner-lg'].join(' ')}>
                 {props.note.entries.map((entry: GroupType|EntryType, i) => {
-                    // Determine if entry is a group, or a regular entry.
-                    let isGroup = entry.hasOwnProperty('entries');
-                    return isGroup ? (
+                    // Determine if entry is a group, or a regular entry.s
+                    return isGroup(entry) ? (
                         <Group 
                             key={generateUUID()} 
                             group={entry as GroupType} 
@@ -103,7 +102,13 @@ export default function Note(props: NoteProps): JSX.Element {
                 })}
             </div>
             <div className={['NoteFooter', 'mt-4'].join(' ')}>
-                {reduceEntries(props.note.entries) && `Total: ${reduceEntries(props.note.entries)}:-`}
+                {reduceEntries(props.note.entries) && (
+                    <> {
+                        `Total: ${reduceEntries(props.note.entries)}:-`
+                    } <br/> {
+                        hasGroups(props.note.entries) && `Total (Groups): ${reduceEntries(props.note.entries.filter((e: EntryType|GroupType) => isGroup(e)))}:-`
+                    } <br/> </>
+                )}
             </div>
             <div className={['NoteDebug', 'mt-8'].join(' ')}>
                 <pre className={['text-sm', 'bg-white', 'p-4', 'rounded-lg', 'shadow-inner', 'shadow-inner-lg', 'overflow-scroll'].join(' ')}>

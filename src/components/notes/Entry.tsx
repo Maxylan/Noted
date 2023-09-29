@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useAuthorization } from '../../features/Authorization/Authorization';
+import { isGroup } from "../../utils/helpers";
 import { 
     Note as NoteType, 
     Group as GroupType, 
@@ -51,7 +52,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                 checked={entry.checked} 
                 onChange={(e) => setEntries(oldEntries => {
                     let oldEntriesCopy = [...oldEntries];
-                    let isPartOfGroup = oldEntriesCopy[index[0]].hasOwnProperty('entries');
+                    let isPartOfGroup = isGroup(oldEntriesCopy[index[0]]);
                     let oldEntry = (isPartOfGroup ? (oldEntriesCopy[index[0]] as GroupType).entries[index[1]] : oldEntriesCopy[index[0]]) as EntryType;
                     oldEntry.checked = e.target.checked;
                     return oldEntriesCopy;
