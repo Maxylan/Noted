@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import './scss/main.scss';
-import './scss/tailwind.scss';
+import './scss/tailwind.css';
 import Authorization from './features/Authorization/Authorization';
 import Menu from './components/navigation/Menu';
 /**

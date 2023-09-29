@@ -17,13 +17,13 @@ $third: rgb(255, 197, 167);
 $highlight: rgb(255, 179, 168);
 $scrap: rgb(244 63 94);
 
-@supports (zoom:2) {
+@supports (zoom:1.5) {
     input[type="radio"], input[type=checkbox] {
         zoom: 1.5;
         padding: 10px;
     }
 }
-@supports not (zoom:2) {
+@supports not (zoom:1.5) {
     input[type="radio"], input[type=checkbox]{
         -ms-transform: scale(1.5); /* IE */
         -moz-transform: scale(1.5); /* FF */
@@ -31,11 +31,11 @@ $scrap: rgb(244 63 94);
         -o-transform: scale(1.5); /* Opera */
         transform: scale(1.5);
         padding: 10px;
-        margin: 1.5rem;
+        margin: 0.33rem 0.66rem;
     }
 }
 
 body {
-    background-color: $primary;
-    color: $text;
+    background-color: rgb(250, 226, 198);
+    color: rgb(80, 69, 56);
 }
