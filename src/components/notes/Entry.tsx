@@ -55,7 +55,14 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
             let oldEntriesCopy = [...oldEntries];
             let isPartOfGroup = isGroup(oldEntriesCopy[index[0]]);
             let oldEntry = (isPartOfGroup ? (oldEntriesCopy[index[0]] as GroupType).entries[index[1]] : oldEntriesCopy[index[0]]) as EntryType;
-            ((oldEntry as EntryType)[key] as any) = value; // What??
+            
+            if (value === 'deleteValueIfPresent') {
+                delete (oldEntry as EntryType)[key];
+            }
+            else {
+                ((oldEntry as EntryType)[key] as any) = value; // What??
+            }
+            
             return oldEntriesCopy;
         });
     }
@@ -93,14 +100,14 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                             defaultValue={entry.price} 
                             onBlur={(e) => {
                                 let value = Number.parseFloat(e.target.value);
-                                if (e.target.value && value && !isNaN(value) && !Number.isNaN(value)) {
-                                    updateEntry('price', Number.parseFloat(e.target.value));
-                                }
+                                updateEntry('price', (e.target.value && value && !isNaN(value) && !Number.isNaN(value)) ? 
+                                    Number.parseFloat(e.target.value) : 
+                                    'deleteValueIfPresent');
                                 setPriceIsBeingEdited(false);
                             }} />
                     ) : (entry.price ? 
                         (<>{ entry.price }</>): 
-                        (editable ? (<MoneyOffIcon className={['text-highlight'].join(' ')}/>) : (<></>)))
+                        (editable ? (<MoneyOffIcon fontSize={'small'} className={['text-highlight'].join(' ')}/>) : (<></>)))
                     }
             </span>
         </div>
