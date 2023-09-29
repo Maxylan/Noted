@@ -6,8 +6,9 @@ import {
     Group as GroupType, 
     Entry as EntryType 
 } from '../../types/Notes';
-import Entry from './Entry';
 import Group from './Group';
+import Entry from './Entry';
+import CreateEntrySelection from './CreateEntrySelection';
 import EditIcon from '@mui/icons-material/Edit';
 /**
  * @license     MIT License
@@ -22,25 +23,29 @@ export interface NoteProps extends JSX.IntrinsicAttributes {
     setEntries: React.Dispatch<React.SetStateAction<(EntryType | GroupType)[]>>;
 }
 
+/**
+ * Note hook. Required to use a note.
+ * @param _note 
+ * @returns 
+ */
 export const useNoteProps = (_note: NoteType = defaultNote()): NoteProps => {
     const [title, setTitle] = useState<string>(_note.title);
     const [editable, setEditable] = useState<boolean>(_note.editable);
     const [entries, setEntries] = useState<(EntryType|GroupType)[]>(_note.entries);
-    const note: NoteType = {
-        ..._note,
+    const noteRef = useRef<NoteType>(_note);
+    const note = {
+        ...noteRef.current,
         title: title, 
         editable: editable, 
         entries: entries
     };
 
-    /*
     useEffect(() => {
-        setNote({
-            title: title,
-            entries: entries
-        });
-    }, [title, entries]);
-    */
+        // note.title = title;
+        // note.editable = editable;
+        note.updated = Date.now();
+        // note.entries = entries;
+    }, [note, title, editable, entries]);
 
     return {
         note: note,
@@ -100,6 +105,7 @@ export default function Note(props: NoteProps): JSX.Element {
                             setEntries={props.setEntries} />
                     );
                 })}
+                <CreateEntrySelection index={props.note.entries.length} setEntries={props.setEntries} />
             </div>
             <div className={['NoteFooter', 'mt-4'].join(' ')}>
                 {reduceEntries(props.note.entries) && (
@@ -112,7 +118,7 @@ export default function Note(props: NoteProps): JSX.Element {
             </div>
             <div className={['NoteDebug', 'mt-8'].join(' ')}>
                 <pre className={['text-sm', 'bg-white', 'p-4', 'rounded-lg', 'shadow-inner', 'shadow-inner-lg', 'overflow-scroll'].join(' ')}>
-                    {JSON.stringify(props.note, null, 2)}
+                    {true ? JSON.stringify(props.note, null, 2) : 'Hidden when Skai is watching'}
                 </pre>
             </div>
         </div>

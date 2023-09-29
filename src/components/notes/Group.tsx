@@ -6,6 +6,7 @@ import {
     Entry as EntryType 
 } from '../../types/Notes';
 import Entry from './Entry';
+import CreateEntrySelection from './CreateEntrySelection';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -89,16 +90,19 @@ export default function Group({group, editable, index, setEntries}: GroupProps):
                 </span>
             </div>
             <div className={['my-2'].join(' ')}>
-                {expanded && group.entries?.map((entry, i) => {
-                    return (
-                        <Entry 
-                            key={generateUUID()}
-                            editable={editable} 
-                            entry={entry} 
-                            index={[index, i]} 
-                            setEntries={setEntries} />
-                    )
-                })}
+                {expanded && (<>{
+                    group.entries?.map((entry, i) => {
+                        return (
+                            <Entry 
+                                key={generateUUID()}
+                                editable={editable} 
+                                entry={entry} 
+                                index={[index, i]} 
+                                setEntries={setEntries} />
+                        )
+                    })}   
+                    <CreateEntrySelection index={[index, group.entries.length]} setEntries={setEntries} />
+                </>)}
             </div>
             <div className={['w-full', 'border-highlight', 'border-t-[1px]'].join(' ')}>
                 {`${reduceEntries(group.entries)}:-`}
@@ -149,8 +153,8 @@ const DeleteGroupPrompt = function ({hide, groupIndex, setEntries} : {
                     <span className={['text-2xl', 'font-bold', 'mb-4'].join(' ')}>Delete Group</span>
                     <span className={['text-xl', 'mb-4'].join(' ')}>Are you sure you want to delete this group?</span>
                     <div className={['w-full', 'flex', 'justify-center', 'items-center'].join(' ')}>
-                        <button className={['w-1/2', 'h-12', 'rounded-lg', 'bg-scrap', 'shadow-md', 'hover:shadow-lg', 'mr-2'].join(' ')} onClick={() => deleteAll()}>Delete All</button>
-                        <button className={['w-1/2', 'h-12', 'rounded-lg', 'bg-scrap', 'shadow-md', 'hover:shadow-lg', 'ml-2'].join(' ')} onClick={() => deleteGroup()}>Delete Group</button>
+                        <button className={['w-1/2', 'h-12', 'rounded-lg', 'bg-highlight', 'shadow-md', 'hover:shadow-lg', 'mr-2'].join(' ')} onClick={() => deleteAll()}>Delete All</button>
+                        <button className={['w-1/2', 'h-12', 'rounded-lg', 'bg-highlight', 'shadow-md', 'hover:shadow-lg', 'ml-2'].join(' ')} onClick={() => deleteGroup()}>Delete Group</button>
                     </div>
                     <button className={['Cancel', 'w-1/2', 'h-12', 'rounded-lg', 'bg-secondary', 'shadow-md', 'hover:shadow-lg', 'mt-4'].join(' ')} onClick={cancel}>Cancel</button>
                 </div>
