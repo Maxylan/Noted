@@ -1,4 +1,10 @@
 /**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
+
+/**
  * City Gross configurations taken straight from citygross.se
  */
 const grossconfig = {

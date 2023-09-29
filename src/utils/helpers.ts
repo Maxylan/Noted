@@ -3,6 +3,12 @@ import {
     Group, 
     Entry 
 } from '../types/Notes';
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
+
 
 export const generateUUID = () => Date.now().toString(16) + Math.random().toString(16).substring(2, 10);
 

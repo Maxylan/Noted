@@ -3,6 +3,11 @@ import React, { useEffect, useState } from 'react';
 import './scss/tailwind.scss';
 import Authorization from './features/Authorization/Authorization';
 import Menu from './components/navigation/Menu';
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
 
 /**
  * Main app class/(component).

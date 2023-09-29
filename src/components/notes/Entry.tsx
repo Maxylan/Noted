@@ -5,6 +5,12 @@ import {
     Group as GroupType, 
     Entry as EntryType 
 } from '../../types/Notes';
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
+
 
 export interface EntryProps extends JSX.IntrinsicAttributes {
     /**

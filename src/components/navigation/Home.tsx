@@ -4,6 +4,12 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import NotesIcon from '@mui/icons-material/Notes';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import SettingsIcon from '@mui/icons-material/Settings';
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
+
 const buttonClasses = ['w-full', 'h-fit', 'my-4', 'py-4', 'px-2', 'text-2xl', 'rounded-md', 'bg-secondary', 'shadow-md', 'hover:shadow-lg', 'md:cursor-pointer'].join(' ');
 
 export default function Home(props: any): JSX.Element {

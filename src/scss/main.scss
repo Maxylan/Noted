@@ -1,8 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* npx tailwindcss -i ./src/scss/main.scss -o ./src/scss/tailwind.scss */
-/* npx tailwindcss -i ./src/scss/main.scss -o ./src/scss/tailwind.scss --watch */
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
+
+/* npx tailwindcss -i ./src/scss/main.scss -o ./src/scss/tailwind.css */
+/* npx tailwindcss -i ./src/scss/main.scss -o ./src/scss/tailwind.css --watch */
 
 $text: rgb(80, 69, 56);
 $primary: rgb(250, 226, 198);

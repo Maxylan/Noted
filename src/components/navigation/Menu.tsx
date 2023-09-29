@@ -2,6 +2,12 @@ import React, { useContext, useState, useEffect } from 'react';
 import Note, { useNoteProps } from '../notes/Note';
 import Pages from '../../types/pages';
 import Home from './Home';
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
+
 
 /**
  * Main Menu of the application.

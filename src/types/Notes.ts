@@ -1,4 +1,10 @@
 import { generateUUID } from "../utils/helpers";
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
+
 
 export const defaultNote = (): Note => ({
     id: generateUUID(),

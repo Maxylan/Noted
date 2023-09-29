@@ -1,3 +1,9 @@
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
+
 export interface GrossConfig {
     DEBUG: boolean,
     HOST: 'https://www.citygross.se',

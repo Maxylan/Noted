@@ -6,6 +6,11 @@ import {
   GrossConfig, 
   StaffansConfig 
 } from './configs/config';
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
 
 // Create the Staffanshopper global and assign the extended window object to it.
 declare global {

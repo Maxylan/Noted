@@ -9,6 +9,11 @@ import {
 import Entry from './Entry';
 import Group from './Group';
 import EditIcon from '@mui/icons-material/Edit';
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
 
 export interface NoteProps extends JSX.IntrinsicAttributes {
     note: NoteType;

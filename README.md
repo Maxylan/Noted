@@ -4,6 +4,11 @@ Uhm, a README is todo. It will happen I swear.
 
 ..until then, enjoy `Create React App`'s README.
 
+## Tailwind command, so I don't forget.
+
+`npx tailwindcss -i ./src/scss/main.scss -o ./src/scss/tailwind.css --watch`
+
+
 ## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

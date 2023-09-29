@@ -2,6 +2,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { 
     AuthorizationStatus 
 } from './AuthorizationTypes';
+/**
+ * @license     MIT License
+ * @author      Maxylan
+ * @copyright © 2023 Max Olsson
+ */
 
 export const defaultAuthorizationStatus = (): AuthorizationStatus => ({
     status: 'unauthorized',
