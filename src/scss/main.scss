@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* npx tailwindcss -i ./src/scss/main.scss -o ./src/scss/tailwind.scss */
+/* npx tailwindcss -i ./src/scss/main.scss -o ./src/scss/tailwind.scss --watch */
+
+$text: rgb(80, 69, 56);
+$primary: rgb(250, 226, 198);
+$secondary: rgb(255, 213, 178);
+$third: rgb(255, 197, 167);
+$highlight: rgb(255, 179, 168);
+$scrap: rgb(244 63 94);
+
+@supports (zoom:2) {
+    input[type="radio"], input[type=checkbox] {
+        zoom: 1.5;
+        padding: 10px;
+    }
+}
+@supports not (zoom:2) {
+    input[type="radio"], input[type=checkbox]{
+        -ms-transform: scale(1.5); /* IE */
+        -moz-transform: scale(1.5); /* FF */
+        -webkit-transform: scale(1.5); /* Safari and Chrome */
+        -o-transform: scale(1.5); /* Opera */
+        transform: scale(1.5);
+        padding: 10px;
+        margin: 1.5rem;
+    }
+}
+
+body {
+    background-color: $primary;
+    color: $text;
+}
