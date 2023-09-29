@@ -101,7 +101,7 @@ export default function Group({group, editable, index, setEntries}: GroupProps):
                                 setEntries={setEntries} />
                         )
                     })}   
-                    <CreateEntrySelection index={[index, group.entries.length]} setEntries={setEntries} />
+                    {editable && <CreateEntrySelection index={[index, group.entries.length]} setEntries={setEntries} />}
                 </>)}
             </div>
             <div className={['w-full', 'border-highlight', 'border-t-[1px]'].join(' ')}>

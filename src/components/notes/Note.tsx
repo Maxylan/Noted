@@ -105,7 +105,7 @@ export default function Note(props: NoteProps): JSX.Element {
                             setEntries={props.setEntries} />
                     );
                 })}
-                <CreateEntrySelection index={props.note.entries.length} setEntries={props.setEntries} />
+                {props.note.editable && <CreateEntrySelection index={props.note.entries.length} setEntries={props.setEntries} />}
             </div>
             <div className={['NoteFooter', 'mt-4'].join(' ')}>
                 {reduceEntries(props.note.entries) && (

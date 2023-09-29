@@ -63,12 +63,12 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
     return (
         <div className={['Entry'].join(' ')}>
             {entry.hasOwnProperty('checked') && 
-            <input 
-                type='checkbox' 
-                className={['mr-4'].join(' ')}
-                checked={entry.checked} 
-                onChange={(e) => updateEntry('checked', e.target.checked)}
-                disabled={!editable} />}
+                <input 
+                    type='checkbox' 
+                    className={['mr-4'].join(' ')}
+                    checked={entry.checked} 
+                    onChange={(e) => updateEntry('checked', e.target.checked)} />
+            }
             <span onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}>
                     {titleIsBeingEdited ? (
                         <input 
@@ -100,7 +100,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                             }} />
                     ) : (entry.price ? 
                         (<>{ entry.price }</>): 
-                        (<MoneyOffIcon className={['text-third', 'mr-2'].join(' ')}/>))
+                        (editable ? (<MoneyOffIcon className={['text-third', 'mr-2'].join(' ')}/>) : (<></>)))
                     }
             </span>
         </div>
