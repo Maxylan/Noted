@@ -35,7 +35,6 @@ export const defaultNote = (): Note => ({
         } as Group,
         {
             title: 'Test Entry 2',
-            checked: true,
             price: 10.99,
         } as Entry,
     ]
@@ -95,9 +94,9 @@ export interface Entry {
      */
     title: string;
     /**
-     * Flag to indicate if the entry is checked.
+     * Does the entry have a checkbox (property exists)? If yes, is it checked?
      */
-    checked: boolean;
+    checked: boolean|undefined;
     /**
      * Entry image (optional).
      */

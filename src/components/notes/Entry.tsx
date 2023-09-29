@@ -44,6 +44,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
 
     return (
         <div className={['Entry'].join(' ')}>
+            {entry.hasOwnProperty('checked') && 
             <input 
                 type='checkbox' 
                 className={['mr-4'].join(' ')}
@@ -55,7 +56,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                     oldEntry.checked = e.target.checked;
                     return oldEntriesCopy;
                 })}
-                disabled={!editable} />
+                disabled={!editable} />}
             <span>{entry.title}</span>
             {entry.price && <span className={'float-right'}>{`${entry.price}:-`}</span>}
         </div>
