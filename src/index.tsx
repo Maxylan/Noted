@@ -26,10 +26,15 @@ global.Staffanshopper = window as any;
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+/* Strict
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
+);
+*/
+root.render(
+  <App />
 );
 
 // If you want to start measuring performance in your app, pass a function

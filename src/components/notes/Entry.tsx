@@ -99,9 +99,9 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                             size={1}
                             defaultValue={entry.price} 
                             onBlur={(e) => {
-                                let value = Number.parseFloat(e.target.value);
+                                let value = parseFloat(e.target.value);
                                 updateEntry('price', (e.target.value && value && !isNaN(value) && !Number.isNaN(value)) ? 
-                                    Number.parseFloat(e.target.value) : 
+                                    parseFloat(e.target.value) : 
                                     'deleteValueIfPresent');
                                 setPriceIsBeingEdited(false);
                             }} />

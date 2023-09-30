@@ -27,25 +27,65 @@ export default function CreateEntrySelection({index, setEntries}: {
     setEntries: React.Dispatch<React.SetStateAction<(Entry|Group)[]>>}
 ): JSX.Element {
     const authorizationStatus = useAuthorization();
+    const isSelectionInGroup = (): boolean => Array.isArray(index);
+    const newEntry = (checkbox: boolean = false): Entry => {
+        return (checkbox ? {
+            title: 'New Entry',
+            checked: false
+        } : {
+            title: 'New Entry'
+        }) as Entry
+    };
+    const newGroup = (): Group => ({
+        title: 'New Group',
+        image: undefined,
+        color: 'rgb(255, 197, 167)',
+        entries: [],
+    })
+    const createEntry = (type: 'text'|'checklist'|'group') => {
+        setEntries(oldEntries => {
+            let oldEntriesCopy = [...oldEntries];
+
+            if (isSelectionInGroup()) {
+                index = index as [number, number];
+                // Apparently, React Strict Mode made the app fire twice, and that meant this created two entries.
+                // Didn't create two entries when !isSelectionInGroup() though! Weird!
+                // Had to turn off Strict Mode to fix this.
+                (oldEntriesCopy[index[0]] as Group).entries.push((type === 'text' ? newEntry() : newEntry(true)));
+            }
+            else if (!isSelectionInGroup()) {
+                oldEntriesCopy.push((() => { switch(type) {
+                    case 'text': return newEntry();
+                    case 'checklist': return newEntry(true);
+                    case 'group': return newGroup();
+                }})());
+            }
+            
+            return oldEntriesCopy;
+        });
+    }
 
     useEffect(() => {
     }, []);
 
     return (
         <div className={['CreateEntrySelection'].join(' ')}>
-            <div 
+            <span 
+                onClick={() => createEntry('text')}
                 className={['bg-transparent', 'inline-block', 'w-fit', 'h-fit', 'my-2', 'mr-2', 'px-2', 'pb-1', 'shadow-md', 'hover:shadow-lg', 'rounded-md', 'border-2', 'border-highlight'].join(' ')}>
                 <TitleIcon className={['text-highlight'].join(' ')}/>
-            </div>
-            <div 
+            </span>
+            <span 
+                onClick={() => createEntry('checklist')}
                 className={['bg-transparent', 'inline-block', 'w-fit', 'h-fit', 'm-2', 'px-2', 'pb-1', 'shadow-md', 'hover:shadow-lg', 'rounded-md', 'border-2', 'border-highlight'].join(' ')}>
                 <ChecklistIcon className={['text-highlight'].join(' ')}/>
-            </div>
-            {!Array.isArray(index) && 
-                <div 
+            </span>
+            {!isSelectionInGroup() && 
+                <span 
+                    onClick={() => createEntry('group')}
                     className={['bg-transparent', 'inline-block', 'w-fit', 'h-fit', 'm-2', 'px-2', 'pb-1', 'shadow-md', 'hover:shadow-lg', 'rounded-md', 'border-2', 'border-highlight'].join(' ')}>
                     <AddIcon className={['text-highlight'].join(' ')}/>
-                </div>
+                </span>
             }
         </div>
     )

@@ -118,7 +118,7 @@ export default function Note(props: NoteProps): JSX.Element {
             </div>
             <div className={['NoteDebug', 'mt-8'].join(' ')}>
                 <pre className={['text-sm', 'bg-white', 'p-4', 'rounded-lg', 'shadow-inner', 'shadow-inner-lg', 'overflow-scroll'].join(' ')}>
-                    {true ? JSON.stringify(props.note, null, 2) : 'Hidden when Skai is watching'}
+                    {false ? JSON.stringify(props.note, null, 2) : 'Hidden when Skai is watching'}
                 </pre>
             </div>
         </div>
