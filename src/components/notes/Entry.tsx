@@ -81,13 +81,17 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                         <input 
                             ref={titleInputRef}
                             type='text' 
+                            maxLength={40}
+                            className={['w-48'].join(' ')}
                             defaultValue={entry.title} 
                             onBlur={(e) => {
-                                updateEntry('title', e.target.value);
-                                setTitleIsBeingEdited(false);
+                                if (e.target.value.length <= 40) {
+                                    updateEntry('title', e.target.value);
+                                    setTitleIsBeingEdited(false);
+                                }
                             }} />
                     ) : (
-                        <>{ entry.title }</>
+                        <div className={['inline-block', 'max-w-[12rem]'].join(' ')}>{ entry.title }</div>
                     )}
             </span>
             <span className={'float-right'} onClick={editable ? () => setPriceIsBeingEdited(true) : undefined}>
@@ -97,12 +101,15 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                             type='number' 
                             className={['w-16'].join(' ')}
                             size={1}
+                            maxLength={5}
                             defaultValue={entry.price} 
                             onBlur={(e) => {
-                                let value = parseFloat(e.target.value);
-                                updateEntry('price', (e.target.value && value && !isNaN(value) && !Number.isNaN(value)) ? 
-                                    parseFloat(e.target.value) : 
-                                    'deleteValueIfPresent');
+                                if (e.target.value.length <= 5) {
+                                    let value = parseFloat(e.target.value);
+                                    updateEntry('price', (e.target.value && value && !isNaN(value) && !Number.isNaN(value)) ? 
+                                        parseFloat(e.target.value) : 
+                                        'deleteValueIfPresent');
+                                }
                                 setPriceIsBeingEdited(false);
                             }} />
                     ) : (entry.price ? 

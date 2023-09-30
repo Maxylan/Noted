@@ -71,13 +71,14 @@ export default function Group({group, editable, index, setEntries}: GroupProps):
                         <input 
                             ref={titleInputRef}
                             type='text' 
+                            maxLength={48}
                             defaultValue={group.title} 
                             onBlur={(e) => {
                                 updateEntry('title', e.target.value);
                                 setTitleIsBeingEdited(false);
                             }} />) : (
                         <>
-                            {group.title}
+                            <div className={['inline-block', 'max-w-[16rem]'].join(' ')}>{ group.title }</div>
                         </>)
                     }
                 </span>
