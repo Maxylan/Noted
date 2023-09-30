@@ -41,11 +41,20 @@ export interface EntryProps extends JSX.IntrinsicAttributes {
 export default function Entry({entry, editable, index, setEntries}: EntryProps): JSX.Element {
     const [titleIsBeingEdited, setTitleIsBeingEdited] = useState<boolean>(false);
     const [priceIsBeingEdited, setPriceIsBeingEdited] = useState<boolean>(false);
-    const authorizationStatus = useAuthorization();
+    const [showDeleteRowPrompt, setDeleteRowPromptVisible] = useState<boolean>(false);
+    const hidePrompt = (e: any) => {if (showDeleteRowPrompt && e.target.className.split(' ')[0] !== 'Entry') { setDeleteRowPromptVisible(false); }},
+          showPrompt = () => {console.log('i fireddd');setDeleteRowPromptVisible(true);};
+    const mouseHoldTimeout = useRef<NodeJS.Timeout>();
     const titleInputRef = useRef<any>();
     const priceInputRef = useRef<any>();
+    const authorizationStatus = useAuthorization();
 
-    useEffect(() => {
+    useEffect(() => { // For delete row prompt
+        document.querySelector('body')!.addEventListener('click',  hidePrompt);
+        return () => document.querySelector('body')!.removeEventListener('click', hidePrompt);
+    }, []);
+
+    useEffect(() => { // For editing title/price
         if (titleIsBeingEdited) { titleInputRef.current?.focus(); }
         if (priceIsBeingEdited) { priceInputRef.current?.focus(); }
     }, [titleIsBeingEdited, priceIsBeingEdited]);
@@ -68,15 +77,21 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
     }
 
     return (
-        <div className={['Entry'].join(' ')}>
-            {entry.hasOwnProperty('checked') && 
+        <div className={['Entry'].join(' ')} 
+            onMouseUp={() => clearTimeout(mouseHoldTimeout.current)} 
+            onMouseDown={(e) => {console.log('i fire');mouseHoldTimeout.current = setTimeout(() => showPrompt, 2000)}}>
+            {showDeleteRowPrompt ? (
+                <div className={['bg-scrap', 'text-white', 'w-full', 'h-full'].join(' ')}>
+                </div>
+            ) : (<>
+                {entry.hasOwnProperty('checked') && 
                 <input 
                     type='checkbox' 
                     className={['mr-4'].join(' ')}
                     checked={entry.checked} 
                     onChange={(e) => updateEntry('checked', e.target.checked)} />
-            }
-            <span onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}>
+                }
+                <span onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}>
                     {titleIsBeingEdited ? (
                         <input 
                             ref={titleInputRef}
@@ -93,8 +108,8 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                     ) : (
                         <div className={['inline-block', 'max-w-[12rem]'].join(' ')}>{ entry.title }</div>
                     )}
-            </span>
-            <span className={'float-right'} onClick={editable ? () => setPriceIsBeingEdited(true) : undefined}>
+                </span>
+                <span className={'float-right'} onClick={editable ? () => setPriceIsBeingEdited(true) : undefined}>
                     {priceIsBeingEdited ? (
                         <input 
                             ref={priceInputRef}
@@ -116,7 +131,8 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                         (<>{`${entry.price}:-`}</>): 
                         (editable ? (<MoneyOffIcon fontSize={'small'} className={['text-highlight'].join(' ')}/>) : (<></>)))
                     }
-            </span>
+                </span>
+            </>)}
         </div>
     )
 } 
