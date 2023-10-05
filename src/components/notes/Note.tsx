@@ -70,7 +70,7 @@ export default function Note(props: NoteProps): JSX.Element {
     }, [titleIsBeingEdited]);
 
     return (
-        <div className={['EditNote', 'text-2xl'].join(' ')}>
+        <div className={['EditNote', 'text-2xl', 'mb-24', 'md:mb-0'].join(' ')}>
             <div className={['NoteHeader', 'mt-4', 'mb-8'].join(' ')}>
                 <span onClick={props.note.editable ? () => setTitleIsBeingEdited(true) : undefined}>
                     {titleIsBeingEdited ? (
