@@ -7,6 +7,7 @@ import {
     Entry as EntryType 
 } from '../../types/Notes';
 import MoneyOffIcon from '@mui/icons-material/MoneyOff';
+import DeleteIcon from '@mui/icons-material/Delete';
 /**
  * @license     MIT License
  * @author      Maxylan
@@ -41,98 +42,108 @@ export interface EntryProps extends JSX.IntrinsicAttributes {
 export default function Entry({entry, editable, index, setEntries}: EntryProps): JSX.Element {
     const [titleIsBeingEdited, setTitleIsBeingEdited] = useState<boolean>(false);
     const [priceIsBeingEdited, setPriceIsBeingEdited] = useState<boolean>(false);
-    const [showDeleteRowPrompt, setDeleteRowPromptVisible] = useState<boolean>(false);
-    const hidePrompt = (e: any) => {if (showDeleteRowPrompt && e.target.className.split(' ')[0] !== 'Entry') { setDeleteRowPromptVisible(false); }},
-          showPrompt = () => {console.log('i fireddd');setDeleteRowPromptVisible(true);};
-    const mouseHoldTimeout = useRef<NodeJS.Timeout>();
     const titleInputRef = useRef<any>();
     const priceInputRef = useRef<any>();
     const authorizationStatus = useAuthorization();
-
-    useEffect(() => { // For delete row prompt
-        document.querySelector('body')!.addEventListener('click',  hidePrompt);
-        return () => document.querySelector('body')!.removeEventListener('click', hidePrompt);
-    }, []);
 
     useEffect(() => { // For editing title/price
         if (titleIsBeingEdited) { titleInputRef.current?.focus(); }
         if (priceIsBeingEdited) { priceInputRef.current?.focus(); }
     }, [titleIsBeingEdited, priceIsBeingEdited]);
 
-    const updateEntry = (key: keyof EntryType, value: any) => {
+    const updateEntry = (key: keyof EntryType|undefined, value: any) => {
         setEntries(oldEntries => {
             let oldEntriesCopy = [...oldEntries];
             let isPartOfGroup = isGroup(oldEntriesCopy[index[0]]);
             let oldEntry = (isPartOfGroup ? (oldEntriesCopy[index[0]] as GroupType).entries[index[1]] : oldEntriesCopy[index[0]]) as EntryType;
-            
-            if (value === 'deleteValueIfPresent') {
-                delete (oldEntry as EntryType)[key];
+
+            if (typeof key === 'undefined') {
+                if (isPartOfGroup) {
+                    (oldEntriesCopy[index[0]] as GroupType).entries.splice(index[1], 1);
+                } else {
+                    oldEntriesCopy.splice(index[0], 1);
+                }
             }
-            else {
-                ((oldEntry as EntryType)[key] as any) = value; // What??
+            else if (oldEntry) {
+                if (value === 'deleteValueIfPresent' && (oldEntry as EntryType)[key]) {
+                    delete (oldEntry as EntryType)[key];
+                }
+                else {
+                    ((oldEntry as EntryType)[key] as any) = value; // What??
+                }
             }
             
             return oldEntriesCopy;
         });
     }
 
+    const updateTitle = (e: React.FocusEvent) => { 
+        e.stopPropagation(); 
+        setTimeout(() => {
+            let value = (e.target as HTMLInputElement).value;
+            console.log('value', value);
+
+            // if (e.target.value.length <= 40) {
+            if (value && value.length <= 40) {
+                updateEntry('title', value);
+                setTitleIsBeingEdited(false);
+            }
+        }, 0);
+    }
+
     return (
-        <div className={['Entry'].join(' ')} 
-            onMouseUp={() => clearTimeout(mouseHoldTimeout.current)} 
-            onMouseDown={(e) => {console.log('i fire');mouseHoldTimeout.current = setTimeout(() => showPrompt, 2000)}}>
-            {showDeleteRowPrompt ? (
-                <div className={['bg-scrap', 'text-white', 'w-full', 'h-full'].join(' ')}>
-                </div>
-            ) : (<>
-                {entry.hasOwnProperty('checked') && 
-                <input 
-                    type='checkbox' 
-                    className={['mr-4'].join(' ')}
-                    checked={entry.checked} 
-                    onChange={(e) => updateEntry('checked', e.target.checked)} />
-                }
-                <span onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}>
-                    {titleIsBeingEdited ? (
-                        <input 
-                            ref={titleInputRef}
-                            type='text' 
-                            maxLength={40}
-                            className={['w-48'].join(' ')}
-                            defaultValue={entry.title} 
-                            onBlur={(e) => {
-                                if (e.target.value.length <= 40) {
-                                    updateEntry('title', e.target.value);
-                                    setTitleIsBeingEdited(false);
-                                }
-                            }} />
-                    ) : (
-                        <div className={['inline-block', 'max-w-[12rem]'].join(' ')}>{ entry.title }</div>
-                    )}
-                </span>
-                <span className={'float-right'} onClick={editable ? () => setPriceIsBeingEdited(true) : undefined}>
-                    {priceIsBeingEdited ? (
-                        <input 
-                            ref={priceInputRef}
-                            type='number' 
-                            className={['w-16'].join(' ')}
-                            size={1}
-                            maxLength={5}
-                            defaultValue={entry.price} 
-                            onBlur={(e) => {
-                                if (e.target.value.length <= 5) {
-                                    let value = parseFloat(e.target.value);
-                                    updateEntry('price', (e.target.value && value && !isNaN(value) && !Number.isNaN(value)) ? 
-                                        parseFloat(e.target.value) : 
-                                        'deleteValueIfPresent');
-                                }
-                                setPriceIsBeingEdited(false);
-                            }} />
-                    ) : (entry.price ? 
-                        (<>{`${entry.price}:-`}</>): 
-                        (editable ? (<MoneyOffIcon fontSize={'small'} className={['text-highlight'].join(' ')}/>) : (<></>)))
-                    }
-                </span>
-            </>)}
+        <div className={['Entry', 'mt-0.5'].join(' ')}>
+            {entry.hasOwnProperty('checked') && 
+            <input 
+                type='checkbox' 
+                className={['mr-4'].join(' ')}
+                checked={entry.checked} 
+                onChange={(e) => updateEntry('checked', e.target.checked)} />
+            }
+            <span 
+                onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}
+                onBlur={updateTitle}>
+                {titleIsBeingEdited ? (
+                    <input 
+                        id={'titleInput'}
+                        ref={titleInputRef}
+                        onBlur={updateTitle}
+                        type='text' 
+                        maxLength={40}
+                        className={['w-48'].join(' ')}
+                        defaultValue={entry.title}  />
+                ) : (
+                    <div className={['inline-block', 'max-w-[12rem]'].join(' ')}>{ entry.title }</div>
+                )}
+            </span>
+            <span className={'float-right'} onClick={editable ? () => setPriceIsBeingEdited(true) : undefined}>
+                {titleIsBeingEdited ? (
+                    <DeleteIcon className={['inline-block', 'text-scrap'/*, 'w-4', 'h-4'*/].join(' ')} onClick={() => updateEntry(undefined, undefined)}/>
+                ) : (
+                priceIsBeingEdited ? (
+                    <input 
+                        ref={priceInputRef}
+                        type='number' 
+                        className={['w-16'].join(' ')}
+                        size={1}
+                        maxLength={5}
+                        defaultValue={entry.price} 
+                        onBlur={(e) => {
+                            console.warn('e.target.value', e.target.value);
+                            if (e.target.value.length <= 5) {
+                                let value = parseFloat(e.target.value);
+                                console.warn('(e.target.value && value && !isNaN(value) && !Number.isNaN(value))', (e.target.value && value && !isNaN(value) && !Number.isNaN(value)));
+                                updateEntry('price', (e.target.value && value && !isNaN(value) && !Number.isNaN(value)) ? 
+                                    parseFloat(e.target.value) : 
+                                    'deleteValueIfPresent');
+                            }
+                            setPriceIsBeingEdited(false);
+                        }} />
+                ) : (entry.price ? 
+                    (<>{`${entry.price}:-`}</>): 
+                    (editable ? (<MoneyOffIcon fontSize={'small'} className={['text-highlight'].join(' ')}/>) : (<></>)))
+                )}
+            </span>
         </div>
     )
 } 
