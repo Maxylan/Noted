@@ -39,7 +39,8 @@ export const useNoteProps = (_note: NoteType = defaultNote()): NoteProps => {
         title: title, 
         created: noteRef.current.created, 
         updated: updated, 
-        editable: editable, 
+        editable: editable,
+        debug: noteRef.current.debug, 
         entries: entries
     };
 
@@ -108,18 +109,15 @@ export default function Note(props: NoteProps): JSX.Element {
                 {props.note.editable && <CreateEntrySelection index={props.note.entries.length} setEntries={props.setEntries} />}
             </div>
             <div className={['NoteFooter', 'mt-4'].join(' ')}>
-                {reduceEntries(props.note.entries) && (
-                    <> {
-                        `Total: ${reduceEntries(props.note.entries)}:-`
-                    } <br/> {
-                        hasGroups(props.note.entries) && `Total (Groups): ${reduceEntries(props.note.entries.filter((e: EntryType|GroupType) => isGroup(e)))}:-`
-                    } <br/> </>
-                )}
+                {reduceEntries(props.note.entries) ? `Total: ${reduceEntries(props.note.entries)}:-` : ''}
+                {hasGroups(props.note.entries) && reduceEntries(props.note.entries) && (<><br/>{`Total (Groups): ${reduceEntries(props.note.entries.filter((e: EntryType|GroupType) => isGroup(e)))}:-`}</>)}
             </div>
             <div className={['NoteDebug', 'mt-8'].join(' ')}>
-                <pre className={['text-sm', 'bg-white', 'p-4', 'rounded-lg', 'shadow-inner', 'shadow-inner-lg', 'overflow-scroll'].join(' ')}>
-                    {false ? JSON.stringify(props.note, null, 2) : 'Hidden when Skai is watching'}
-                </pre>
+                {props.note.debug && (
+                    <pre className={['text-sm', 'bg-white', 'p-4', 'rounded-lg', 'shadow-inner', 'shadow-inner-lg', 'overflow-scroll'].join(' ')}>
+                        {JSON.stringify(props.note, null, 2)}
+                    </pre>
+                )}
             </div>
         </div>
     )

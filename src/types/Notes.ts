@@ -1,4 +1,5 @@
 import { generateUUID } from "../utils/helpers";
+import Settings from "../features/settings";
 /**
  * @license     MIT License
  * @author      Maxylan
@@ -12,7 +13,8 @@ export const defaultNote = (): Note => ({
     created: Date.now(),
     updated: Date.now(),
     editable: true,
-    entries: [
+    debug: Settings.debugEnabled(),
+    entries: [/*
         {
             title: 'Test Entry 1',
             checked: false,
@@ -37,7 +39,7 @@ export const defaultNote = (): Note => ({
             title: 'Test Entry 2',
             price: 10.99,
         } as Entry,
-    ]
+    */]
 });
 
 export interface Note {
@@ -61,6 +63,10 @@ export interface Note {
      * Is editable? / Display buttons that allow the user to edit the note.
      */
     editable: boolean;
+    /**
+     * Display debug details?
+     */
+    debug: boolean;
     /**
      * All entires in the note.
      * Each entry represents a row in the note.

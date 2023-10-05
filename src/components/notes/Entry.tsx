@@ -60,6 +60,10 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
             if (typeof key === 'undefined') {
                 if (isPartOfGroup) {
                     (oldEntriesCopy[index[0]] as GroupType).entries.splice(index[1], 1);
+
+                    if ((oldEntriesCopy[index[0]] as GroupType).entries.length === 0) {
+                        oldEntriesCopy.splice(index[0], 1);
+                    }
                 } else {
                     oldEntriesCopy.splice(index[0], 1);
                 }
