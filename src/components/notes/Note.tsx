@@ -70,7 +70,7 @@ export default function Note(props: NoteProps): JSX.Element {
     }, [titleIsBeingEdited]);
 
     return (
-        <div className={['EditNote', 'text-2xl', 'mb-24', 'md:mb-0', 'text-left'].join(' ')}>
+        <div className={['EditNote', 'w-full', 'text-2xl', 'mb-24', 'md:mb-0', 'text-left'].join(' ')}>
             <div 
                 className={['NoteHeader', 'mt-4', 'mb-8'].join(' ')} 
                 onClick={props.note.editable ? () => setTitleIsBeingEdited(true) : undefined}>
@@ -82,8 +82,8 @@ export default function Note(props: NoteProps): JSX.Element {
                         onChange={(e) => props.setTitle(e.target.value)} 
                         onBlur={() => setTitleIsBeingEdited(false)} />) : (
                     <>
-                        {props.note.editable && <EditIcon className="mr-2" />}
-                        <p>{props.note.title}</p>
+                        {props.note.editable && <EditIcon className="mr-2 inline-block" />}
+                        <p className="inline-block">{props.note.title}</p>
                     </>)
                 }
             </div>

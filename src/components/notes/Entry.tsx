@@ -69,8 +69,10 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                 }
             }
             else if (oldEntry) {
-                if (value === 'deleteValueIfPresent' && (oldEntry as EntryType)[key]) {
-                    delete (oldEntry as EntryType)[key];
+                if (value === 'deleteValueIfPresent') {
+                    if (oldEntry && oldEntry.hasOwnProperty(key)) {
+                        delete (oldEntry as EntryType)[key];
+                    }
                 }
                 else {
                     ((oldEntry as EntryType)[key] as any) = value; // What??
