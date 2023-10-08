@@ -14,9 +14,9 @@ const buttonClasses = ['w-full', 'h-fit', 'my-4', 'py-4', 'px-2', 'text-2xl', 'r
 
 export default function Home(props: any): JSX.Element {
     return (
-        <div className={['Home', 'w-full', 'h-full', 'flex', 'flex-col', 'justify-center', 'align-center', 'items-center', 'text-center'].join(' ')}>
+        <div className={['Home', 'max-w-xs', 'h-full', 'flex', 'flex-col'].join(' ')}>
             <img 
-                className={['max-w-xs', 'max-h-80', 'rounded-lg', 'shadow-md', 'my-8', 'md:mx-8'].join(' ')}
+                className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}
                 src={'https://placehold.co/600x400'} 
                 alt='Staffanshopper' />
             <div onClick={() => props.setCurrentPage(Pages.NewNote)} className={buttonClasses}>

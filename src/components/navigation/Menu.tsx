@@ -24,7 +24,7 @@ export default function Menu(): JSX.Element {
 
     return (
         <>
-            <div className={['Menu', 'relative', 'w-screen', 'h-screen', 'p-4', 'flex-block', 'md:w-[640px]', 'md:h-fit', 'm-auto', 'md:shadow-lg', 'md:rounded'].join(' ')}>
+            <div className={['Menu', 'relative', 'p-4', 'flex', 'md:w-[640px]', 'md:h-fit', 'm-auto', 'md:shadow-lg', 'md:rounded', 'justify-center', 'align-center', 'items-center', 'text-center'].join(' ')}>
                 {((page) => {
                     switch(page) {
                         case Pages.NewNote: return (<Note {...newNoteProps}/>);
@@ -36,7 +36,7 @@ export default function Menu(): JSX.Element {
                 {currentPage === Pages.Home|| (
                     <span
                         onClick={() => setCurrentPage(Pages.Home)}
-                        className={(window.innerWidth < 768 ? 'bottom-4 left-4' : 'top-4 right-4') + ' ' + ['absolute', 'p-4', 'rounded-full', 'shadow-lg', 'bg-third'].join(' ')}>
+                        className={(window.innerWidth < 768 ? 'bottom-4 left-4' : 'top-4 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-lg', 'bg-third'].join(' ')}>
                         <HouseIcon fontSize='large' className='text-primary'/>
                     </span>
                 )}
