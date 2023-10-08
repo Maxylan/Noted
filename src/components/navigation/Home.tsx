@@ -1,5 +1,6 @@
 import React from 'react';
 import Pages from '../../types/pages';
+import EditIcon from '@mui/icons-material/Edit';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import NotesIcon from '@mui/icons-material/Notes';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
@@ -19,7 +20,13 @@ export default function Home(props: any): JSX.Element {
                 className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}
                 src={'https://placehold.co/600x400'} 
                 alt='Staffanshopper' />
-            <div onClick={() => props.setCurrentPage(Pages.NewNote)} className={buttonClasses}>
+            {props.note.entries.length > 0 && 
+                <div onClick={() => props.setCurrentPage(Pages.NewNote)} className={buttonClasses}>
+                    <EditIcon fontSize='large' className={'float-left'}/>
+                    <span>{Pages.Continue}</span>
+                </div>
+            }
+            <div onClick={() => { props.resetCurrentNote(); props.setCurrentPage(Pages.NewNote); }} className={buttonClasses}>
                 <ReceiptLongIcon fontSize='large' className={'float-left'}/>
                 <span>{Pages.NewNote}</span>
             </div>

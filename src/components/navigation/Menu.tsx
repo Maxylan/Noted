@@ -30,7 +30,7 @@ export default function Menu(): JSX.Element {
                         case Pages.NewNote: return (<Note {...newNoteProps}/>);
                         case Pages.Notes: return (<></>);
                         case Pages.About: return (<></>);
-                        default: return (<Home currentPage={currentPage} setCurrentPage={setCurrentPage} />);
+                        default: return (<Home currentPage={currentPage} setCurrentPage={setCurrentPage} note={newNoteProps.note} resetCurrentNote={newNoteProps.reset}/>);
                     }
                 })(currentPage)}
                 {currentPage === Pages.Home|| (

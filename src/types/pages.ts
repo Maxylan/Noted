@@ -5,6 +5,7 @@
  */
 
 enum Pages {
+    Continue = 'Continue',
     NewNote = 'New Note',
     Notes = 'Notes',
     About = 'About',
