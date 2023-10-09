@@ -9,6 +9,7 @@ import {
 import Group from './Group';
 import Entry from './Entry';
 import CreateEntrySelection from './CreateEntrySelection';
+import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
 /**
  * @license     MIT License
@@ -118,8 +119,16 @@ export default function Note(props: NoteProps): JSX.Element {
                 {props.note.editable && <CreateEntrySelection index={props.note.entries.length} setEntries={props.setEntries} />}
             </div>
             <div className={['NoteFooter', 'mt-4'].join(' ')}>
-                {reduceEntries(props.note.entries) ? `Total: ${reduceEntries(props.note.entries)}:-` : ''}
-                {hasGroups(props.note.entries) && reduceEntries(props.note.entries) && (<><br/>{`Total (Groups): ${reduceEntries(props.note.entries.filter((e: EntryType|GroupType) => isGroup(e)))}:-`}</>)}
+                <div className={['inline-block', 'py-2'].join(' ')}>
+                    {reduceEntries(props.note.entries) > 0 ? `Total: ${reduceEntries(props.note.entries)}:-` : ''}
+                    {hasGroups(props.note.entries) && reduceEntries(props.note.entries) > 0 && (<><br/>{`Total (Groups): ${reduceEntries(props.note.entries.filter((e: EntryType|GroupType) => isGroup(e)))}:-`}</>)}
+                </div>
+                <span className={['p-1', 'inline', 'float-right', 'rounded-lg', 'shadow-lg', 'bg-third'].join(' ')}>
+                    {props.note.editable ? 
+                        (<DoneIcon fontSize='large' className='text-primary' onClick={() => props.setEditable(oldValue => !oldValue)}/>):
+                        (<EditIcon fontSize='large' className='text-primary' onClick={() => props.setEditable(oldValue => !oldValue)}/>)
+                    }
+                </span>
             </div>
             <div className={['NoteDebug', 'mt-8'].join(' ')}>
                 {props.note.debug && (
