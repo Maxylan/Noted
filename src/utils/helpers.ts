@@ -12,6 +12,11 @@ import {
 
 export const generateUUID = () => Date.now().toString(16) + Math.random().toString(16).substring(2, 10);
 
+export const date = () => {
+    let d = new Date();
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+};
+
 export const isGroup = (e: Entry|Group): boolean => e && e.hasOwnProperty('entries');
 export const hasGroups = (a: (Entry|Group)[]): boolean => a.some((e: Entry|Group) => isGroup(e));
 

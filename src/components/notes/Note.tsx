@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { generateUUID, isGroup, hasGroups, reduceEntries } from "../../utils/helpers";
+import { 
+    generateUUID, 
+    isGroup, 
+    hasGroups, 
+    reduceEntries 
+} from "../../utils/helpers";
+import { 
+    saveNote 
+} from "../../utils/store";
 import { 
     defaultNote, 
     Note as NoteType, 
@@ -48,6 +56,7 @@ export const useNoteProps = (_note: NoteType = defaultNote()): NoteProps => {
 
     useEffect(() => {
         setUpdated(Date.now());
+        setTimeout(() => saveNote(note), 0);
     }, [title, editable, entries]);
 
     const resetNote = (): void => {
@@ -57,6 +66,7 @@ export const useNoteProps = (_note: NoteType = defaultNote()): NoteProps => {
         setEditable(noteRef.current.editable);
         setEntries(noteRef.current.entries);
     };
+
     return {
         note: note,
         setTitle: setTitle,

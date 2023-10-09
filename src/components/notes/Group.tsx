@@ -108,7 +108,18 @@ export default function Group({group, editable, index, setEntries}: GroupProps):
             <div className={['w-full', 'border-highlight', 'border-t-[1px]'].join(' ')}>
                 {`${reduceEntries(group.entries)}:-`}
                 {editable && <>
-                    <DeleteIcon className={['float-right', 'mr-2', 'mt-[4px]', 'text-scrap'].join(' ')} onClick={() => showPrompt()}/>
+                    <DeleteIcon className={['float-right', 'mr-2', 'mt-[4px]', 'text-scrap'].join(' ')} onClick={() => {
+                        if (group.entries.length > 0) {
+                            showPrompt();
+                        } else {
+                            setEntries(oldEntries => {
+                                let oldEntriesCopy = [...oldEntries];
+                                oldEntriesCopy.splice(index, 1);
+                                return oldEntriesCopy;
+                            });
+                            hidePrompt();
+                        }
+                    }}/>
                     {showDeleteGroupPrompt && <DeleteGroupPrompt hide={hidePrompt} groupIndex={index} setEntries={setEntries} />}
                 </>}
             </div>
