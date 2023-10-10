@@ -16,6 +16,26 @@ export const date = () => {
     let d = new Date();
     return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
 };
+export const dateKey = () => {
+    let d = new Date();
+    return d.getFullYear() + '_' + (d.getMonth() + 1);
+};
+export const getMonthName = (month: number) => {
+    switch (month) {
+        case 1: return 'January';
+        case 2: return 'February';
+        case 3: return 'March';
+        case 4: return 'April';
+        case 5: return 'May';
+        case 6: return 'June';
+        case 7: return 'July';
+        case 8: return 'August';
+        case 9: return 'September';
+        case 10: return 'Oktober';
+        case 11: return 'November';
+        case 12: return 'December';
+    }
+};
 
 export const isGroup = (e: Entry|Group): boolean => e && e.hasOwnProperty('entries');
 export const hasGroups = (a: (Entry|Group)[]): boolean => a.some((e: Entry|Group) => isGroup(e));

@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Note, { useNoteProps } from '../notes/Note';
+import ListNotes from '../notes/ListNotes';
 import Pages from '../../types/pages';
 import Home from './Home';
 import HouseIcon from '@mui/icons-material/House';
@@ -17,7 +18,7 @@ import HouseIcon from '@mui/icons-material/House';
  */
 export default function Menu(): JSX.Element {
     const [currentPage, setCurrentPage] = useState<Pages>(Pages.Home);
-    const newNoteProps = useNoteProps();
+    const note = useNoteProps();
 
     useEffect(() => {
     }, []);
@@ -27,10 +28,23 @@ export default function Menu(): JSX.Element {
             <div className={['Menu', 'relative', 'p-4', 'flex', 'w-full', 'md:w-[640px]', 'md:h-fit', 'm-auto', 'md:shadow-lg', 'md:rounded', 'justify-center', 'align-center', 'items-center', 'text-center'].join(' ')}>
                 {((page) => {
                     switch(page) {
-                        case Pages.NewNote: return (<Note {...newNoteProps}/>);
-                        case Pages.Notes: return (<></>);
-                        case Pages.About: return (<></>);
-                        default: return (<Home currentPage={currentPage} setCurrentPage={setCurrentPage} note={newNoteProps.note} resetCurrentNote={newNoteProps.reset}/>);
+                        case Pages.NewNote: return (
+                            <Note {...note}/>
+                        );
+                        case Pages.Notes: return (
+                            <ListNotes 
+                                load={note.load} 
+                                setCurrentPage={setCurrentPage}/>
+                        );
+                        case Pages.About: return (
+                            <></>
+                        );
+                        default: return (
+                            <Home currentPage={currentPage} 
+                                setCurrentPage={setCurrentPage} 
+                                resetCurrentNote={note.reset} 
+                                note={note.note}/>
+                        );
                     }
                 })(currentPage)}
                 {currentPage === Pages.Home|| (

@@ -30,6 +30,7 @@ export interface NoteProps extends JSX.IntrinsicAttributes {
     setTitle: React.Dispatch<React.SetStateAction<string>>;
     setEditable: React.Dispatch<React.SetStateAction<boolean>>;
     setEntries: React.Dispatch<React.SetStateAction<(EntryType | GroupType)[]>>;
+    load: (note: NoteType) => void,
     reset: () => void;
 }
 
@@ -59,8 +60,8 @@ export const useNoteProps = (_note: NoteType = defaultNote()): NoteProps => {
         setTimeout(() => saveNote(note), 0);
     }, [title, editable, entries]);
 
-    const resetNote = (): void => {
-        noteRef.current = defaultNote();
+    const newNote = (note: NoteType|undefined = undefined): void => {
+        noteRef.current = note || defaultNote();
         setTitle(noteRef.current.title);
         setUpdated(noteRef.current.updated);
         setEditable(noteRef.current.editable);
@@ -72,7 +73,8 @@ export const useNoteProps = (_note: NoteType = defaultNote()): NoteProps => {
         setTitle: setTitle,
         setEditable: setEditable,
         setEntries: setEntries,
-        reset: resetNote
+        load: (note: NoteType) => newNote(note),
+        reset: () => newNote()
     }
 } 
 

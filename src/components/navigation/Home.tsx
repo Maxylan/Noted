@@ -24,6 +24,8 @@ export default function Home(props: any): JSX.Element {
                 <div onClick={() => props.setCurrentPage(Pages.NewNote)} className={buttonClasses}>
                     <EditIcon fontSize='large' className={'float-left'}/>
                     <span>{Pages.Continue}</span>
+                    <br/>
+                    <span className={['text-highlight', 'text-base'].join(' ')}>{props.note.title}</span>
                 </div>
             }
             <div onClick={() => { props.resetCurrentNote(); props.setCurrentPage(Pages.NewNote); }} className={buttonClasses}>
