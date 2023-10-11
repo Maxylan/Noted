@@ -36,7 +36,9 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
 
     useEffect(() => {
         let _notes = [...notes];
-        let [y, m] = dateKey().split('_').map((n) => parseInt(n)); // year + month extrapolated from dateKey().
+        
+        // year + month extrapolated from dateKey().
+        let [y, m] = dateKey().split('_').map((n) => parseInt(n));
         for (let i = 0; i < monthsToFetch; i++) {
             if (m - i < 1) { y -= 1; m = 12; }
             let monthlyNotes = getNotes(`${y}_${m - i}`);
