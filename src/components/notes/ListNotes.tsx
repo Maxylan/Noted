@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
     dateKey, 
     getMonthName,
+    isGroup, 
     generateUUID, 
     reduceEntries 
 } from "../../utils/helpers";
@@ -17,6 +18,7 @@ import {
 import Modal from "../misc/Modal";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 /**
  * @license     MIT License
  * @author      Maxylan
@@ -36,6 +38,7 @@ export interface ListNotesProps extends JSX.IntrinsicAttributes {
 export default function ListNotes(props: ListNotesProps): JSX.Element {
     const [visibilityMonthlyDetails, setVisibilityMonthlyDetails] = useState<boolean>(false);
     const [visibilityNoteDetails, setVisibilityNoteDetails] = useState<boolean>(false);
+    const [search, setSearchValue] = useState<string>('');
     const [notes, setNotes] = useState<(Note[])[]>([]);
     const [monthsToFetch, setMonthsToFetch] = useState(4);
 
@@ -56,7 +59,12 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
     }, [monthsToFetch]);
 
     return (
-        <div className={['ListNotes', 'w-full', 'text-2xl', 'mb-24', 'md:mb-0', 'text-left'].join(' ')}>
+        <div className={['ListNotes', 'w-full', 'text-2xl', 'text-left'].join(' ')}>
+            <input className={['Search', 'w-3/4', 'text-xl', 'mb-4', 'shadow-inner', 'shadow-inner-md', 'inline-block'].join(' ')}
+                type='text'
+                onChange={(e) => setSearchValue(e.target.value)}
+                value={search}/>
+            <SearchOutlinedIcon className={['inline-block', 'ml-2'].join(' ')}/>
             {(() => {
                 let [y, m] = dateKey().split('_').map((n) => parseInt(n)); // year + month extrapolated from dateKey().
                 return notes.map((monthlyNotes, i) => {
@@ -67,7 +75,9 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                                 <span className={['inline-block'].join(' ')}>{`${y} - ${getMonthName(m)}`}</span>
                                 <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')}/>
                             </div>
-                            {monthlyNotes.map((note) => (<>
+                            {monthlyNotes.filter((note) => {
+                                return note.title.includes(search) || note.entries.some((entry) => isGroup(entry) && entry.title.includes(search));
+                            }).map((note) => (<>
                                 <div className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'px-8', 'py-[0.25rem]', 'mx-2'].join(' ')} 
                                     key={generateUUID()} onClick={() => { props.load(note); props.setCurrentPage(Pages.NewNote); }}>
                                     <span className={['inline-block'].join(' ')}>
