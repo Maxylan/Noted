@@ -76,7 +76,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                                 <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')}/>
                             </div>
                             {monthlyNotes.filter((note) => {
-                                return note.title.includes(search) || note.entries.some((entry) => isGroup(entry) && entry.title.includes(search));
+                                return note.title.toLowerCase().includes(search.toLowerCase()) || note.entries.some((entry) => isGroup(entry) && entry.title.toLowerCase().includes(search.toLowerCase()));
                             }).map((note) => (<>
                                 <div className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'px-8', 'py-[0.25rem]', 'mx-2'].join(' ')} 
                                     key={generateUUID()} onClick={() => { props.load(note); props.setCurrentPage(Pages.NewNote); }}>
