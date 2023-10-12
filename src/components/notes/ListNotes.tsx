@@ -25,6 +25,13 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
  * @copyright © 2023 Max Olsson
  */
 
+export interface MonthDetails {
+    year: number;
+    month: number;
+    name: string;
+    notes: Note[];
+}
+
 export interface ListNotesProps extends JSX.IntrinsicAttributes {
     load: (note: Note) => void;
     setCurrentPage: React.Dispatch<React.SetStateAction<Pages>>;
@@ -37,7 +44,10 @@ export interface ListNotesProps extends JSX.IntrinsicAttributes {
  */
 export default function ListNotes(props: ListNotesProps): JSX.Element {
     const [visibilityMonthlyDetails, setVisibilityMonthlyDetails] = useState<boolean>(false);
+    const [month, setMonth] = useState<MonthDetails|undefined>(); // For details
     const [visibilityNoteDetails, setVisibilityNoteDetails] = useState<boolean>(false);
+    const [note, setNote] = useState<Note|undefined>(); // For details
+
     const [search, setSearchValue] = useState<string>('');
     const [notes, setNotes] = useState<(Note[])[]>([]);
     const [monthsToFetch, setMonthsToFetch] = useState(4);
@@ -89,6 +99,15 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
         setNotes(_notes);
     }, [monthsToFetch]);
 
+    const showMonthlyInfo = (_month: MonthDetails) => {
+        setMonth(_month);
+        setVisibilityMonthlyDetails(true);
+    }
+    const showNoteInfo = (_note: Note) => {
+        setNote(_note);
+        setVisibilityNoteDetails(true);
+    }
+
     return (
         <div className={['ListNotes', 'w-full', 'text-2xl', 'text-left'].join(' ')}>
             <input className={['Search', 'w-3/4', 'text-xl', 'mb-4', 'shadow-inner', 'shadow-inner-md', 'inline-block'].join(' ')}
@@ -104,27 +123,27 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                         <div className={['h-fit', 'w-full', 'rounded-lg', 'bg-secondary', 'py-2', 'mb-8', 'shadow-inner', 'shadow-inner-lg'].join(' ')}>
                             <div key={generateUUID()} className={['h-fit', 'text-2xl', 'mt-2', 'mb-4', 'mx-4'].join(' ')}>
                                 <span className={['inline-block'].join(' ')}>{`${y} - ${getMonthName(m)}`}</span>
-                                <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')}/>
+                                <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')} onClick={() => showMonthlyInfo({year: y, month: m, name: getMonthName(m)!, notes: monthlyNotes})}/>
                             </div>
-                            {monthlyNotes.reverse().filter((note) => {
-                                return note.title.toLowerCase().includes(search.toLowerCase()) || note.entries.some((entry) => isGroup(entry) && entry.title.toLowerCase().includes(search.toLowerCase()));
-                            }).map((note) => (<>
+                            {monthlyNotes.reverse().filter((_note) => {
+                                return _note.title.toLowerCase().includes(search.toLowerCase()) || _note.entries.some((entry) => isGroup(entry) && entry.title.toLowerCase().includes(search.toLowerCase()));
+                            }).map((_note) => (<>
                                 <div key={generateUUID()} className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'px-8', 'py-[0.25rem]', 'mx-2', 'flex'].join(' ')}>
-                                    <span className={['inline-block', 'w-full'].join(' ')} onClick={(e) => { e.stopPropagation(); props.load(note); props.setCurrentPage(Pages.NewNote); }}>
-                                        {note.title + (reduceEntries(note.entries) > 0 ? ` (${reduceEntries(note.entries)}:-)` : '')}
+                                    <span className={['inline-block', 'w-full'].join(' ')} onClick={(e) => { e.stopPropagation(); props.load(_note); props.setCurrentPage(Pages.NewNote); }}>
+                                        {_note.title}
                                     </span>
-                                    <div className='Dropdown relative' id={`dropdown_${note.id}`} style={{display: 'none'}}>
+                                    <div className='Dropdown relative' id={`dropdown_${_note.id}`} style={{display: 'none'}}>
                                         <div className={['bg-secondary', 'w-32', 'h-fit', 'absolute', 'left-[-4rem]', 'top-8', 'rounded-lg', 'shadow-lg'].join(' ')}>
                                             <div className={['flex', 'flex-col'].join(' ')}>
-                                                <div className={['block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-t-lg'].join(' ')}>Info</div>
-                                                <div className={['block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')}>Edit</div>
-                                                <div className={['block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-b-lg'].join(' ')}>Delete</div>
+                                                <div className={['Button', 'block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-t-lg'].join(' ')} onClick={() => showNoteInfo(_note)}>Info</div>
+                                                <div className={['Button', 'block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')}>Edit</div>
+                                                <div className={['Button', 'block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-b-lg'].join(' ')}>Delete</div>
                                             </div>
                                         </div>
                                         <div className={['bg-secondary', 'rotate-45', 'w-6', 'h-6', 'absolute', 'left-[-3.66rem]', 'top-6'].join(' ')} />
                                     </div>
                                     <MoreHorizOutlinedIcon className={['More', 'inline-block', 'mt-[2.5px]', 'z-10'].join(' ')} onClick={() => {
-                                        let element = document.getElementById(`dropdown_${note.id}`);
+                                        let element = document.getElementById(`dropdown_${_note.id}`);
                                         if (element) {
                                             if (element.style.display === 'none') {
                                                 element.style.display = 'initial';
@@ -141,9 +160,17 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
             })()}
             <button onClick={() => setMonthsToFetch(oldValue => oldValue + 4)}></button>
             <Modal visible={visibilityMonthlyDetails} setVisibility={setVisibilityMonthlyDetails}>
-
+                {month && <>
+                    <p>{`${month.year}/${month.month} (${month.name})`}</p>
+                </>}
             </Modal>
             <Modal visible={visibilityNoteDetails} setVisibility={setVisibilityNoteDetails}>
+                {note && <>
+                    <p>Title: {note.title}</p>
+                    <p>Created: {note.created}</p>
+                    <p>Last Updated: {note.updated}</p>
+                    <p>Total Cost: {reduceEntries(note.entries)}</p>
+                </>}
             </Modal>
         </div>
     )

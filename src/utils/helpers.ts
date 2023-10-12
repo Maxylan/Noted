@@ -31,7 +31,7 @@ export const getMonthName = (month: number) => {
         case 7: return 'July';
         case 8: return 'August';
         case 9: return 'September';
-        case 10: return 'Oktober';
+        case 10: return 'October';
         case 11: return 'November';
         case 12: return 'December';
     }
