@@ -18,7 +18,7 @@ export interface ModalProps extends React.HTMLProps<HTMLElement> {
 export default function Modal(props: ModalProps): JSX.Element {
     // Make a modal
     return (
-        <div className={['DeleteGroupPrompt', 'w-full', 'h-full', 'fixed', 'top-0', 'left-0', 'flex', 'justify-center', 'items-center', 'bg-opacity-50', 'bg-gray-800'].join(' ')} 
+        <div className={['Modal', 'w-full', 'h-full', 'fixed', 'top-0', 'left-0', 'flex', 'justify-center', 'items-center', 'bg-opacity-50', 'bg-gray-800'].join(' ')} 
             style={{display: props.visible ? 'initial' : 'none'}} 
             onClick={(e) => { 
                 e.stopPropagation(); 

@@ -75,15 +75,33 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                                 <span className={['inline-block'].join(' ')}>{`${y} - ${getMonthName(m)}`}</span>
                                 <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')}/>
                             </div>
-                            {monthlyNotes.filter((note) => {
+                            {monthlyNotes.reverse().filter((note) => {
                                 return note.title.toLowerCase().includes(search.toLowerCase()) || note.entries.some((entry) => isGroup(entry) && entry.title.toLowerCase().includes(search.toLowerCase()));
                             }).map((note) => (<>
-                                <div className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'px-8', 'py-[0.25rem]', 'mx-2'].join(' ')} 
-                                    key={generateUUID()} onClick={() => { props.load(note); props.setCurrentPage(Pages.NewNote); }}>
-                                    <span className={['inline-block'].join(' ')}>
+                                <div key={generateUUID()} className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'px-8', 'py-[0.25rem]', 'mx-2', 'flex'].join(' ')}>
+                                    <span className={['inline-block', 'w-full'].join(' ')} onClick={(e) => { e.stopPropagation(); props.load(note); props.setCurrentPage(Pages.NewNote); }}>
                                         {note.title + (reduceEntries(note.entries) > 0 ? ` (${reduceEntries(note.entries)}:-)` : '')}
                                     </span>
-                                    <MoreHorizOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')}/>
+                                    <div className='Dropdown relative' id={`dropdown_${note.id}`} style={{display: 'none'}}>
+                                        <div className={['bg-secondary', 'w-32', 'h-fit', 'absolute', 'left-[-4rem]', 'top-8', 'rounded-lg', 'shadow-lg'].join(' ')}>
+                                            <div className={['flex', 'flex-col'].join(' ')}>
+                                                <div className={['block', 'w-full', 'z-10', 'px-4', 'py-2', 'hover:bg-third', 'rounded-t-lg'].join(' ')}>Info</div>
+                                                <div className={['block', 'w-full', 'z-10', 'px-4', 'py-2', 'hover:bg-third'].join(' ')}>Edit</div>
+                                                <div className={['block', 'w-full', 'z-10', 'px-4', 'py-2', 'hover:bg-third', 'rounded-b-lg'].join(' ')}>Delete</div>
+                                            </div>
+                                        </div>
+                                        <div className={['bg-secondary', 'rotate-45', 'w-6', 'h-6', 'absolute', 'left-[-3.66rem]', 'top-6'].join(' ')} />
+                                    </div>
+                                    <MoreHorizOutlinedIcon className={['inline-block', 'mt-[2.5px]'].join(' ')} onClick={() => {
+                                        let element = document.getElementById(`dropdown_${note.id}`);
+                                        if (element) {
+                                            if (element.style.display === 'none') {
+                                                element.style.display = 'initial';
+                                            } else {
+                                                element.style.display = 'none';
+                                            }
+                                        }
+                                    }}/>
                                 </div>
                             </>))}
                         </div>
