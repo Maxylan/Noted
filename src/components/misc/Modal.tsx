@@ -24,7 +24,7 @@ export default function Modal(props: ModalProps): JSX.Element {
                 e.stopPropagation(); 
                 props.setVisibility(false); 
             }}>
-            <div className={['p-8', 'm-4', 'flex', 'flex-col', 'justify-center', 'items-center', 'bg-primary', 'rounded-lg', 'shadow-lg'].join(' ')} onClick={undefined}>
+            <div className={['p-8', 'm-4', 'md:max-w-lg', 'flex', 'flex-col', 'justify-center', 'items-center', 'bg-primary', 'rounded-lg', 'shadow-lg'].join(' ')} onClick={undefined}>
                 <div className={['w-full', 'h-full', 'flex', 'flex-col', 'justify-center', 'items-center', 'text-center'].join(' ')} onClick={undefined}>
                     {props.children}
                 </div>

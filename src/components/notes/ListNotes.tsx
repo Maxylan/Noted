@@ -110,7 +110,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
 
     return (
         <div className={['ListNotes', 'w-full', 'text-2xl', 'text-left'].join(' ')}>
-            <input className={['Search', 'w-3/4', 'text-xl', 'mb-4', 'shadow-inner', 'shadow-inner-md', 'inline-block'].join(' ')}
+            <input className={['Search', 'w-3/4', 'text-xl', 'mb-4', 'rounded-sm', 'shadow-inner', 'shadow-inner-md', 'inline-block'].join(' ')}
                 type='text'
                 onChange={(e) => setSearchValue(e.target.value)}
                 value={search}/>
@@ -135,14 +135,14 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                                     <div className='Dropdown relative' id={`dropdown_${_note.id}`} style={{display: 'none'}}>
                                         <div className={['bg-secondary', 'w-32', 'h-fit', 'absolute', 'left-[-4rem]', 'top-8', 'rounded-lg', 'shadow-lg'].join(' ')}>
                                             <div className={['flex', 'flex-col'].join(' ')}>
-                                                <div className={['Button', 'block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-t-lg'].join(' ')} onClick={() => showNoteInfo(_note)}>Info</div>
-                                                <div className={['Button', 'block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')}>Edit</div>
-                                                <div className={['Button', 'block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-b-lg'].join(' ')}>Delete</div>
+                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-t-lg'].join(' ')} onClick={() => showNoteInfo(_note)}>Info</div>
+                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')}>Edit</div>
+                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-b-lg'].join(' ')}>Delete</div>
                                             </div>
                                         </div>
                                         <div className={['bg-secondary', 'rotate-45', 'w-6', 'h-6', 'absolute', 'left-[-3.66rem]', 'top-6'].join(' ')} />
                                     </div>
-                                    <MoreHorizOutlinedIcon className={['More', 'inline-block', 'mt-[2.5px]', 'z-10'].join(' ')} onClick={() => {
+                                    <MoreHorizOutlinedIcon className={['More', 'inline-block', 'mt-[2.5px]'].join(' ')} onClick={() => {
                                         let element = document.getElementById(`dropdown_${_note.id}`);
                                         if (element) {
                                             if (element.style.display === 'none') {
