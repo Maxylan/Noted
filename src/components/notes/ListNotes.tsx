@@ -42,6 +42,37 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
     const [notes, setNotes] = useState<(Note[])[]>([]);
     const [monthsToFetch, setMonthsToFetch] = useState(4);
 
+    const bodyOnClickEventHandler = function (e: MouseEvent) {
+        // WHAT THE ACTUAL F$@* IS THIS?!
+        /** Begin stupid 💩 */
+        const target = (e.target as any); 
+        /* (in)sanity check
+        console.log(target);
+        console.log(target.className);
+        console.log(typeof target.className);
+        console.log(target.className.baseVal);
+        */
+        let className = typeof target.className === 'object' ? target.className.baseVal : target.className;
+        console.log(className);
+        /** End stupid 💩 */
+
+        if (className.includes('More')) {
+            return;
+        }
+
+        let elements = document.getElementsByClassName('Dropdown');
+        for (let i = 0; i < elements.length; i++) {
+            if (elements[i]) {
+                (elements[i] as any).style.display = 'none';
+            }
+        };
+    };
+
+    useEffect(() => {
+        document.body.addEventListener('click', bodyOnClickEventHandler);
+        return () => document.body.removeEventListener('click', bodyOnClickEventHandler);
+    }, []);
+
     useEffect(() => {
         let _notes = [...notes];
 
@@ -85,14 +116,14 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                                     <div className='Dropdown relative' id={`dropdown_${note.id}`} style={{display: 'none'}}>
                                         <div className={['bg-secondary', 'w-32', 'h-fit', 'absolute', 'left-[-4rem]', 'top-8', 'rounded-lg', 'shadow-lg'].join(' ')}>
                                             <div className={['flex', 'flex-col'].join(' ')}>
-                                                <div className={['block', 'w-full', 'z-10', 'px-4', 'py-2', 'hover:bg-third', 'rounded-t-lg'].join(' ')}>Info</div>
-                                                <div className={['block', 'w-full', 'z-10', 'px-4', 'py-2', 'hover:bg-third'].join(' ')}>Edit</div>
-                                                <div className={['block', 'w-full', 'z-10', 'px-4', 'py-2', 'hover:bg-third', 'rounded-b-lg'].join(' ')}>Delete</div>
+                                                <div className={['block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-t-lg'].join(' ')}>Info</div>
+                                                <div className={['block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')}>Edit</div>
+                                                <div className={['block', 'w-full', 'z-20', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-b-lg'].join(' ')}>Delete</div>
                                             </div>
                                         </div>
                                         <div className={['bg-secondary', 'rotate-45', 'w-6', 'h-6', 'absolute', 'left-[-3.66rem]', 'top-6'].join(' ')} />
                                     </div>
-                                    <MoreHorizOutlinedIcon className={['inline-block', 'mt-[2.5px]'].join(' ')} onClick={() => {
+                                    <MoreHorizOutlinedIcon className={['More', 'inline-block', 'mt-[2.5px]', 'z-10'].join(' ')} onClick={() => {
                                         let element = document.getElementById(`dropdown_${note.id}`);
                                         if (element) {
                                             if (element.style.display === 'none') {
