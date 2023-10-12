@@ -120,14 +120,14 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                 return notes.map((monthlyNotes, i) => {
                     if (m - i < 1) { y -= 1; m = 12; }
                     return (
-                        <div className={['h-fit', 'w-full', 'rounded-lg', 'bg-secondary', 'py-2', 'mb-8', 'shadow-inner', 'shadow-inner-lg'].join(' ')}>
-                            <div key={generateUUID()} className={['h-fit', 'text-2xl', 'mt-2', 'mb-4', 'mx-4'].join(' ')}>
+                        <div key={generateUUID()} className={['h-fit', 'w-full', 'rounded-lg', 'bg-secondary', 'py-2', 'mb-8', 'shadow-inner', 'shadow-inner-lg'].join(' ')}>
+                            <div className={['h-fit', 'text-2xl', 'mt-2', 'mb-4', 'mx-4'].join(' ')}>
                                 <span className={['inline-block'].join(' ')}>{`${y} - ${getMonthName(m)}`}</span>
                                 <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')} onClick={() => showMonthlyInfo({year: y, month: m, name: getMonthName(m)!, notes: monthlyNotes})}/>
                             </div>
                             {monthlyNotes.reverse().filter((_note) => {
                                 return _note.title.toLowerCase().includes(search.toLowerCase()) || _note.entries.some((entry) => isGroup(entry) && entry.title.toLowerCase().includes(search.toLowerCase()));
-                            }).map((_note) => (<>
+                            }).map((_note) => (
                                 <div key={generateUUID()} className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'px-8', 'py-[0.25rem]', 'mx-2', 'flex'].join(' ')}>
                                     <span className={['inline-block', 'w-full'].join(' ')} onClick={(e) => { e.stopPropagation(); props.load(_note); props.setCurrentPage(Pages.NewNote); }}>
                                         {_note.title}
@@ -153,7 +153,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                                         }
                                     }}/>
                                 </div>
-                            </>))}
+                            ))}
                         </div>
                     );
                 });
