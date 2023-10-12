@@ -48,3 +48,11 @@ export const reduceEntries = (entries: (Group|Entry)[]): number => {
         return acc + ((entry as Entry).price ?? 0);
     }, 0);
 }
+
+export const toBase64 = (entries: Note|string): string => {
+    if (typeof entries !== 'string') {
+        entries = JSON.stringify(entries, null, 0);
+    }
+
+    return btoa(entries);
+}

@@ -4,7 +4,8 @@ import {
     getMonthName,
     isGroup, 
     generateUUID, 
-    reduceEntries 
+    reduceEntries,
+    toBase64
 } from "../../utils/helpers";
 import Pages from '../../types/pages';
 import { 
@@ -46,7 +47,8 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
     const [visibilityMonthlyDetails, setVisibilityMonthlyDetails] = useState<boolean>(false);
     const [month, setMonth] = useState<MonthDetails|undefined>(); // For details
     const [visibilityNoteDetails, setVisibilityNoteDetails] = useState<boolean>(false);
-    const [note, setNote] = useState<Note|undefined>(); // For details
+    const [note, setNote] = useState<Note|undefined>(); // For details and export.
+    const [visibilityNoteExport, setVisibilityNoteExport] = useState<boolean>(false);
 
     const [search, setSearchValue] = useState<string>('');
     const [notes, setNotes] = useState<(Note[])[]>([]);
@@ -63,7 +65,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
         console.log(target.className.baseVal);
         */
         let className = typeof target.className === 'object' ? target.className.baseVal : target.className;
-        console.log(className);
+        // console.log(className);
         /** End stupid 💩 */
 
         if (className.includes('More')) {
@@ -107,6 +109,16 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
         setNote(_note);
         setVisibilityNoteDetails(true);
     }
+    const showNoteData = (_note: Note) => {
+        setNote(_note);
+        setVisibilityNoteExport(true);
+    }
+
+    const editNote = (_note: Note) => {
+        _note.editable = true;
+        props.load(_note); 
+        props.setCurrentPage(Pages.NewNote);
+    }
 
     return (
         <div className={['ListNotes', 'w-full', 'text-2xl', 'text-left'].join(' ')}>
@@ -136,7 +148,8 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                                         <div className={['bg-secondary', 'w-32', 'h-fit', 'absolute', 'left-[-4rem]', 'top-8', 'rounded-lg', 'shadow-lg'].join(' ')}>
                                             <div className={['flex', 'flex-col'].join(' ')}>
                                                 <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-t-lg'].join(' ')} onClick={() => showNoteInfo(_note)}>Info</div>
-                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')}>Edit</div>
+                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')} onClick={() => editNote(_note)}>Edit</div>
+                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')} onClick={() => showNoteData(_note)}>Export</div>
                                                 <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-b-lg'].join(' ')}>Delete</div>
                                             </div>
                                         </div>
@@ -171,6 +184,19 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                     <p>Last Updated: {note.updated}</p>
                     <p>Total Cost: {reduceEntries(note.entries)}</p>
                 </>}
+            </Modal>
+            <Modal visible={visibilityNoteExport} setVisibility={setVisibilityNoteExport}>
+                {note && 
+                    <div className={['w-full'].join(' ')}>
+                        <input type='text' className={['text-sm', 'w-full'].join(' ')} value={toBase64(note)} readOnly={true} onFocus={(e) => {
+                            setTimeout(() => {
+                                // let element = document.getElementsByClassName('Modal')[0].getElementsByTagName('input')[0];
+                                // element.focus();
+                                e.target.select();
+                            }, 0); 
+                        }} />
+                    </div>
+                }
             </Modal>
         </div>
     )
