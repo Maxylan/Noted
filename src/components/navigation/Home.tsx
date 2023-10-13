@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import NotesIcon from '@mui/icons-material/Notes';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import DownloadIcon from '@mui/icons-material/Download';
 import SettingsIcon from '@mui/icons-material/Settings';
 /**
  * @license     MIT License
@@ -36,9 +37,9 @@ export default function Home(props: any): JSX.Element {
                 <NotesIcon fontSize='large' className={'float-left'}/>
                 <span>{Pages.Notes}</span>
             </div>
-            <div onClick={() => props.setCurrentPage(Pages.About)} className={buttonClasses}>
-                <QuestionMarkIcon fontSize='large' className={'float-left'}/>
-                <span>{Pages.About}</span>
+            <div onClick={() => props.setCurrentPage(Pages.Import)} className={buttonClasses}>
+                <DownloadIcon fontSize='large' className={'float-left'}/>
+                <span>{Pages.Import}</span>
             </div>
             <div onClick={() => props.setCurrentPage(Pages.Settings)} className={buttonClasses}>
                 <SettingsIcon fontSize='large' className={'float-left'}/>

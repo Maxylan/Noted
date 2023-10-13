@@ -36,7 +36,7 @@ export default function Menu(): JSX.Element {
                                 load={note.load} 
                                 setCurrentPage={setCurrentPage}/>
                         );
-                        case Pages.About: return (
+                        case Pages.Import: return (
                             <></>
                         );
                         default: return (
