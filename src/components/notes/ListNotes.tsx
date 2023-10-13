@@ -187,15 +187,17 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
             </Modal>
             <Modal visible={visibilityNoteExport} setVisibility={setVisibilityNoteExport}>
                 {note && 
-                    <div className={['w-full'].join(' ')}>
-                        <input type='text' className={['text-sm', 'w-full'].join(' ')} value={toBase64(note)} readOnly={true} onFocus={(e) => {
+                    <label className='text-lg'> 
+                        Copy me! 
+                        <span className='text-sm ml-4'>{`(${note.title})`}</span>
+                        <input type='text' className={['text-sm', 'min-w-[16rem]', 'w-full', 'shadow-inner', 'shadow-inner-md'].join(' ')} value={toBase64(note)} readOnly={true} onFocus={(e) => {
                             setTimeout(() => {
                                 // let element = document.getElementsByClassName('Modal')[0].getElementsByTagName('input')[0];
                                 // element.focus();
                                 e.target.select();
                             }, 0); 
                         }} />
-                    </div>
+                    </label>
                 }
             </Modal>
         </div>
