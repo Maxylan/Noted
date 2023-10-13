@@ -175,14 +175,40 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
             <Modal visible={visibilityMonthlyDetails} setVisibility={setVisibilityMonthlyDetails}>
                 {month && <>
                     <p>{`${month.year}/${month.month} (${month.name})`}</p>
+                    <br/>
+                    <div className={['MonthDetails', 'text-lg'].join(' ')}>
+                        <div className={['rounded-t-lg', 'p-2', 'bg-third', 'shadow-md'].join(' ')}>
+                            <p>Notes: {month.notes.length}</p>
+                        </div>
+                        <div className={['p-2', 'bg-third', 'shadow-md', 'border-primary', 'border-y-[2px]'].join(' ')}>
+                            <p>Total Cost: {month.notes.map((_note) => reduceEntries(_note.entries)).reduce((p, c) => p + c)}:-</p>
+                            <p>Total Cost {'(Groups)'}: {month.notes.map((_note) => reduceEntries(_note.entries)).reduce((p, c) => p + c)}:-</p>
+                            <p>Total Cost {'(Checked)'}: {month.notes.map((_note) => reduceEntries(_note.entries)).reduce((p, c) => p + c)}:-</p>
+                        </div>
+                        <div className={['rounded-b-lg', 'p-2', 'bg-third', 'shadow-md'].join(' ')}>
+                            <p>More info to be added...</p>
+                        </div>
+                    </div>
                 </>}
             </Modal>
             <Modal visible={visibilityNoteDetails} setVisibility={setVisibilityNoteDetails}>
                 {note && <>
-                    <p>Title: {note.title}</p>
-                    <p>Created: {note.created}</p>
-                    <p>Last Updated: {note.updated}</p>
-                    <p>Total Cost: {reduceEntries(note.entries)}</p>
+                    <p>{note.title}</p>
+                    <br/>
+                    <div className={['NoteDetails', 'text-lg'].join(' ')}>
+                        <div className={['rounded-t-lg', 'p-2', 'bg-third', 'shadow-md'].join(' ')}>
+                            <p>Created: {note.created}</p>
+                            <p>Last Updated: {note.updated}</p>
+                        </div>
+                        <div className={['p-2', 'bg-third', 'shadow-md', 'border-primary', 'border-y-[2px]'].join(' ')}>
+                            <p>Cost: {reduceEntries(note.entries)}:-</p>
+                            <p>Cost {'(Groups)'}: {reduceEntries(note.entries)}:-</p>
+                            <p>Cost {'(Checked)'}: {reduceEntries(note.entries)}:-</p>
+                        </div>
+                        <div className={['rounded-b-lg', 'p-2', 'bg-third', 'shadow-md'].join(' ')}>
+                            <p>More info to be added...</p>
+                        </div>
+                    </div>
                 </>}
             </Modal>
             <Modal visible={visibilityNoteExport} setVisibility={setVisibilityNoteExport}>
