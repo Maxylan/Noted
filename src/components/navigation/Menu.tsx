@@ -30,12 +30,13 @@ export default function Menu(): JSX.Element {
             <div className={['Menu', 'relative', 'p-4', 'flex', 'w-full', 'md:w-[640px]', 'md:h-fit', 'm-auto', 'md:shadow-lg', 'md:rounded', 'justify-center', 'align-center', 'items-center', 'text-center'].join(' ')}>
                 {((page) => {
                     switch(page) {
-                        case Pages.NewNote: return (
+                        case Pages.EditNote: return (
                             <Note {...note}/>
                         );
                         case Pages.Notes: return (
                             <ListNotes 
                                 load={note.load} 
+                                resetCurrentNote={note.reset} 
                                 setCurrentPage={setCurrentPage}/>
                         );
                         case Pages.Import: return (

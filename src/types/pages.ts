@@ -6,7 +6,7 @@
 
 enum Pages {
     Continue = 'Continue',
-    NewNote = 'New Note',
+    EditNote = 'New Note',
     Notes = 'Notes',
     Import = 'Import',
     Settings = 'Settings',

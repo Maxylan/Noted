@@ -89,7 +89,7 @@ export default function Import(props: ImportProps): JSX.Element {
     const editNote = (_note: Note) => {
         _note.editable = true;
         props.load(_note); 
-        props.setCurrentPage(Pages.NewNote);
+        props.setCurrentPage(Pages.EditNote);
     }
 
     return (

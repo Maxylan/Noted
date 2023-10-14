@@ -19,6 +19,14 @@ let currentKey = dateKey();
 let notesCache: any = {};
 
 /**
+ * Cleares the stored notes cache.
+ * @returns void
+ */
+export const clearNotesCache = (utc: string = currentKey): void => {
+    notesCache = {};
+};
+
+/**
  * Retrieves a month's notes from local storage using a key of `YYYY_MM` (Current year + month).
  * @param utc (Current year + month)
  * @returns {[key: string]: Note}
@@ -97,3 +105,17 @@ export const saveNote = (note: Note): void => {
         }
     }
 };
+
+/**
+ * Deletes a notes from a month in local storage, given a note ID and a key of `YYYY_MM` (Current year + month).
+ * @param utc (Current year + month)
+ * @returns {[key: string]: Note}
+ */
+export const deleteNote = (id: string, utc: string = currentKey): void => {
+    let notes = getNotes(utc);
+    if (notes) {
+        delete notes[id];
+        localStorage.setItem(LocalStorageKeys.Notes + utc, JSON.stringify(notes));
+        clearNotesCache();
+    }
+}

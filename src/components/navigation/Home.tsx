@@ -22,16 +22,16 @@ export default function Home(props: any): JSX.Element {
                 src={'https://placehold.co/600x400'} 
                 alt='Staffanshopper' />
             {props.note.entries.length > 0 && 
-                <div onClick={() => props.setCurrentPage(Pages.NewNote)} className={buttonClasses}>
+                <div onClick={() => props.setCurrentPage(Pages.EditNote)} className={buttonClasses}>
                     <EditIcon fontSize='large' className={'float-left'}/>
                     <span>{Pages.Continue}</span>
                     <br/>
                     <span className={['text-highlight', 'text-base'].join(' ')}>{props.note.title}</span>
                 </div>
             }
-            <div onClick={() => { props.resetCurrentNote(); props.setCurrentPage(Pages.NewNote); }} className={buttonClasses}>
+            <div onClick={() => { props.resetCurrentNote(); props.setCurrentPage(Pages.EditNote); }} className={buttonClasses}>
                 <ReceiptLongIcon fontSize='large' className={'float-left'}/>
-                <span>{Pages.NewNote}</span>
+                <span>{Pages.EditNote}</span>
             </div>
             <div onClick={() => props.setCurrentPage(Pages.Notes)} className={buttonClasses}>
                 <NotesIcon fontSize='large' className={'float-left'}/>

@@ -21,12 +21,15 @@ import {
     Entry 
 } from '../../types/Notes';
 import { 
-    getNotes 
+    getNotes,
+    clearNotesCache,
+    deleteNote
 } from "../../utils/store";
 import Modal from "../misc/Modal";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import SyncIcon from '@mui/icons-material/Sync';
 /**
  * @license     MIT License
  * @author      Maxylan
@@ -42,6 +45,7 @@ export interface MonthDetails {
 
 export interface ListNotesProps extends JSX.IntrinsicAttributes {
     load: (note: Note) => void;
+    resetCurrentNote: () => void;
     setCurrentPage: React.Dispatch<React.SetStateAction<Pages>>;
 }
 
@@ -53,9 +57,11 @@ export interface ListNotesProps extends JSX.IntrinsicAttributes {
 export default function ListNotes(props: ListNotesProps): JSX.Element {
     const [visibilityMonthlyDetails, setVisibilityMonthlyDetails] = useState<boolean>(false);
     const [month, setMonth] = useState<MonthDetails|undefined>(); // For details
+    const [note, setNote] = useState<Note|undefined>(); // For details, export and "confirm delete" prompt
     const [visibilityNoteDetails, setVisibilityNoteDetails] = useState<boolean>(false);
-    const [note, setNote] = useState<Note|undefined>(); // For details and export.
     const [visibilityNoteExport, setVisibilityNoteExport] = useState<boolean>(false);
+    const [visibilityConfirmDelete, setVisibilityConfirmDelete] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const [search, setSearchValue] = useState<string>('');
     const [notes, setNotes] = useState<(Note[])[]>([]);
@@ -92,7 +98,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
         return () => document.body.removeEventListener('click', bodyOnClickEventHandler);
     }, []);
 
-    useEffect(() => {
+    const fetchNotes = () => {
         let _notes = [...notes];
 
         // year + month extrapolated from dateKey().
@@ -106,6 +112,10 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
         }
         
         setNotes(_notes);
+    }
+
+    useEffect(() => {
+        fetchNotes();
     }, [monthsToFetch]);
 
     const showMonthlyInfo = (_month: MonthDetails) => {
@@ -120,14 +130,29 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
         setNote(_note);
         setVisibilityNoteExport(true);
     }
+    const showConfirmDeleteNote = (_note: Note) => {
+        setNote(_note);
+        setVisibilityConfirmDelete(true);
+    }
 
     const editNote = (_note: Note) => {
         _note.editable = true;
         props.load(_note); 
-        props.setCurrentPage(Pages.NewNote);
+        props.setCurrentPage(Pages.EditNote);
+    }
+    const deleteCurrentNote = () => {
+        setLoading(true); // To trigger a re-render.
+        props.resetCurrentNote(); // Reset internally stored "current note", if any.
+        deleteNote(note!.id); // Delete note from localStorage. Also clears cache.
+        setNote(undefined); // Reset note state in this ListNotes.
+        setVisibilityConfirmDelete(false); // Hide the "confirm delete" prompt modal.
+        fetchNotes(); // Refetch notes.
+        setLoading(false); // Render the list anew.
     }
 
-    return (
+    return loading ? (
+        <SyncIcon/>
+    ) : (
         <div className={['ListNotes', 'w-full', 'text-2xl', 'text-left'].join(' ')}>
             <input className={['Search', 'w-3/4', 'text-xl', 'mb-4', 'rounded-sm', 'shadow-inner', 'shadow-inner-md', 'inline-block'].join(' ')}
                 type='text'
@@ -148,7 +173,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                                 return _note.title.toLowerCase().includes(search.toLowerCase()) || _note.entries.some((entry) => isGroup(entry) && entry.title.toLowerCase().includes(search.toLowerCase()));
                             }).map((_note) => (
                                 <div key={generateUUID()} className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'pl-8', 'pr-4', 'py-[0.25rem]', 'mx-2', 'flex'].join(' ')}>
-                                    <span className={['inline-block', 'w-full'].join(' ')} onClick={(e) => { e.stopPropagation(); props.load(_note); props.setCurrentPage(Pages.NewNote); }}>
+                                    <span className={['inline-block', 'w-full'].join(' ')} onClick={(e) => { e.stopPropagation(); props.load(_note); props.setCurrentPage(Pages.EditNote); }}>
                                         {_note.title}
                                     </span>
                                     <div className='Dropdown relative' id={`dropdown_${_note.id}`} style={{display: 'none'}}>
@@ -157,7 +182,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                                                 <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-t-lg'].join(' ')} onClick={() => showNoteInfo(_note)}>Info</div>
                                                 <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')} onClick={() => editNote(_note)}>Edit</div>
                                                 <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')} onClick={() => showNoteData(_note)}>Export</div>
-                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-b-lg'].join(' ')}>Delete</div>
+                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-b-lg'].join(' ')} onClick={() => showConfirmDeleteNote(_note)}>Delete</div>
                                             </div>
                                         </div>
                                         <div className={['bg-secondary', 'rotate-45', 'w-6', 'h-6', 'absolute', 'left-[-3.66rem]', 'top-6'].join(' ')} />
@@ -237,6 +262,22 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                             }, 0); 
                         }} />
                     </label>
+                }
+            </Modal>
+            <Modal visible={visibilityConfirmDelete} setVisibility={setVisibilityConfirmDelete}>
+                {note && 
+                    <div className='text-center'>
+                        <p className={['text-2xl', 'font-bold', 'mb-4'].join(' ')}>Delete Note</p>
+                        <p className={['text-xl', 'mb-4'].join(' ')}>Are you sure you want to delete<br/>"{note.title}"?</p>
+                        <div className={['w-full', 'flex', 'flex-col', 'justify-center', 'items-center'].join(' ')}>
+                            <button className={['w-1/2', 'h-fit', 'mr-2', 'p-2', 'rounded-lg', 'bg-highlight', 'shadow-md', 'hover:shadow-lg'].join(' ')} onClick={() => deleteCurrentNote()}>
+                                <span className={['inline-block', 'align-middle'].join(' ')}>Delete</span>
+                                <br/>
+                                <span className={['inline-block', 'align-middle', 'text-base'].join(' ')}>{'(irreversible)'}</span>
+                            </button>
+                            <button className={['Cancel', 'w-1/2', 'h-fit', 'mt-4', 'p-2', 'rounded-lg', 'bg-secondary', 'shadow-md', 'hover:shadow-lg'].join(' ')} onClick={() => setVisibilityConfirmDelete(false)}>Cancel</button>
+                        </div>
+                    </div>
                 }
             </Modal>
         </div>
