@@ -87,7 +87,6 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
         e.stopPropagation(); 
         setTimeout(() => {
             let value = (e.target as HTMLInputElement).value;
-            console.log('value', value);
 
             // if (e.target.value.length <= 40) {
             if (value && value.length <= 40) {
@@ -98,17 +97,17 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
     }
 
     return (
-        <div className={['Entry', 'mt-0.5'].join(' ')}>
+        <div className={['Entry', 'mt-0.5', 'flex', 'align-center'].join(' ')}>
             {entry.hasOwnProperty('checked') && 
             <input 
                 type='checkbox' 
-                className={['mr-4'].join(' ')}
+                className={['flex-none', 'mr-2'].join(' ')}
                 checked={entry.checked} 
                 onChange={(e) => updateEntry('checked', e.target.checked)} />
             }
-            <span 
-                onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}
-                onBlur={updateTitle}>
+            <div 
+                className={['flex-auto', 'w-full'].join(' ')}
+                onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}>
                 {titleIsBeingEdited ? (
                     <input 
                         id={'titleInput'}
@@ -121,8 +120,8 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                 ) : (
                     <div className={['inline-block', 'max-w-[12rem]'].join(' ')}>{ entry.title }</div>
                 )}
-            </span>
-            <span className={'float-right'} onClick={editable ? () => setPriceIsBeingEdited(true) : undefined}>
+            </div>
+            <div className={'flex-none'} onClick={editable ? () => setPriceIsBeingEdited(true) : undefined}>
                 {titleIsBeingEdited ? (
                     <DeleteIcon className={['inline-block', 'text-scrap'/*, 'w-4', 'h-4'*/].join(' ')} onClick={() => updateEntry(undefined, undefined)}/>
                 ) : (
@@ -149,7 +148,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                     (<>{`${entry.price}:-`}</>): 
                     (editable ? (<MoneyOffIcon fontSize={'small'} className={['text-highlight'].join(' ')}/>) : (<></>)))
                 )}
-            </span>
+            </div>
         </div>
     )
 } 
