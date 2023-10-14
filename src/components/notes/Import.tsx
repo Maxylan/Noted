@@ -94,7 +94,21 @@ export default function Import(props: ImportProps): JSX.Element {
 
     return (
         <div className={['Import'].join(' ')}>
-
+            <div>
+                <label className='text-lg'> 
+                    Paste code here!
+                    <input type='text' className={['text-sm', 'min-w-[16rem]', 'w-full', 'shadow-inner', 'shadow-inner-md'].join(' ')} onChange={(e) => {
+                        if (e.target && e.target.value) {
+                            // Parse bejo.
+                            let _note = noteFromBEJO(e.target.value);
+                            if (_note) {
+                                setNote(_note);
+                                setVisibilityImportPrompt(true);
+                            }
+                        }
+                    }} />
+                </label>
+            </div>
             <Modal visible={visibilityImportPrompt} setVisibility={setVisibilityImportPrompt}>
                 {note && 
                 <div className={['ImportPrompt', 'text-lg'].join(' ')}>

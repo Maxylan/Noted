@@ -101,14 +101,24 @@ export const noteFromBEJO = (bejo: string): Note|false => {
         throw new Error('fromBase64: argument must be a string');
     }
 
-    let note = JSON.parse(atob(bejo));
+    let note: Note|false = false;
+    try {
+        note = JSON.parse(atob(bejo));
+    }
+    catch (e) {
+        return false;        
+    }
+    if (!note) {
+        return false;
+    }
+
     return (
-        note &&
-        note.id &&
-        note.title &&
-        note.entries &&
-        note.created &&
-        note.updated ?  
+        (note as Note) &&
+        (note as Note).id &&
+        (note as Note).title &&
+        (note as Note).entries &&
+        (note as Note).created &&
+        (note as Note).updated ?  
         note : false
     );
 }
