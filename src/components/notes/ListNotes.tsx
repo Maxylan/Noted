@@ -147,7 +147,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                             {monthlyNotes.reverse().filter((_note) => {
                                 return _note.title.toLowerCase().includes(search.toLowerCase()) || _note.entries.some((entry) => isGroup(entry) && entry.title.toLowerCase().includes(search.toLowerCase()));
                             }).map((_note) => (
-                                <div key={generateUUID()} className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'px-8', 'py-[0.25rem]', 'mx-2', 'flex'].join(' ')}>
+                                <div key={generateUUID()} className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'pl-8', 'pr-4', 'py-[0.25rem]', 'mx-2', 'flex'].join(' ')}>
                                     <span className={['inline-block', 'w-full'].join(' ')} onClick={(e) => { e.stopPropagation(); props.load(_note); props.setCurrentPage(Pages.NewNote); }}>
                                         {_note.title}
                                     </span>
@@ -162,16 +162,18 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                                         </div>
                                         <div className={['bg-secondary', 'rotate-45', 'w-6', 'h-6', 'absolute', 'left-[-3.66rem]', 'top-6'].join(' ')} />
                                     </div>
-                                    <MoreHorizOutlinedIcon className={['More', 'inline-block', 'mt-[2.5px]'].join(' ')} onClick={() => {
-                                        let element = document.getElementById(`dropdown_${_note.id}`);
-                                        if (element) {
-                                            if (element.style.display === 'none') {
-                                                element.style.display = 'initial';
-                                            } else {
-                                                element.style.display = 'none';
+                                    <button onClick={() => {
+                                            let element = document.getElementById(`dropdown_${_note.id}`);
+                                            if (element) {
+                                                if (element.style.display === 'none') {
+                                                    element.style.display = 'initial';
+                                                } else {
+                                                    element.style.display = 'none';
+                                                }
                                             }
-                                        }
-                                    }}/>
+                                        }}>
+                                        <MoreHorizOutlinedIcon className={['More', 'inline-block', 'mx-4'].join(' ')} />
+                                    </button>
                                 </div>
                             ))}
                         </div>
