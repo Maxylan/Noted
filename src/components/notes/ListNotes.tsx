@@ -1,10 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
+    date,
+    dayName,
+    argToDate,
     dateKey, 
     getMonthName,
     isGroup, 
+    hasGroups,
+    hasChecked,
     generateUUID, 
     reduceEntries,
+    reduceGroupEntries,
+    reduceCheckedEntries,
     toBase64
 } from "../../utils/helpers";
 import Pages from '../../types/pages';
@@ -182,8 +189,8 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                         </div>
                         <div className={['p-2', 'bg-third', 'shadow-md', 'border-primary', 'border-y-[2px]'].join(' ')}>
                             <p>Total Cost: {month.notes.map((_note) => reduceEntries(_note.entries)).reduce((p, c) => p + c)}:-</p>
-                            <p>Total Cost {'(Groups)'}: {month.notes.map((_note) => reduceEntries(_note.entries)).reduce((p, c) => p + c)}:-</p>
-                            <p>Total Cost {'(Checked)'}: {month.notes.map((_note) => reduceEntries(_note.entries)).reduce((p, c) => p + c)}:-</p>
+                            <p>Total Cost {'(Groups)'}: {month.notes.map((_note) => reduceGroupEntries(_note.entries)).reduce((p, c) => p + c)}:-</p>
+                            <p>Total Cost {'(Checked)'}: {month.notes.map((_note) => reduceCheckedEntries(_note.entries)).reduce((p, c) => p + c)}:-</p>
                         </div>
                         <div className={['rounded-b-lg', 'p-2', 'bg-third', 'shadow-md'].join(' ')}>
                             <p>More info to be added...</p>
@@ -197,13 +204,17 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                     <br/>
                     <div className={['NoteDetails', 'text-lg'].join(' ')}>
                         <div className={['rounded-t-lg', 'p-2', 'bg-third', 'shadow-md'].join(' ')}>
-                            <p>Created: {note.created}</p>
-                            <p>Last Updated: {note.updated}</p>
+                            <p>Created:<br/>{`${argToDate(note.created)} (${dayName(note.created, 'en')})`}</p>
+                            <p>Last Updated:<br/>{`${argToDate(note.updated)} (${dayName(note.updated, 'en')})`}</p>
                         </div>
                         <div className={['p-2', 'bg-third', 'shadow-md', 'border-primary', 'border-y-[2px]'].join(' ')}>
                             <p>Cost: {reduceEntries(note.entries)}:-</p>
-                            <p>Cost {'(Groups)'}: {reduceEntries(note.entries)}:-</p>
-                            <p>Cost {'(Checked)'}: {reduceEntries(note.entries)}:-</p>
+                            {hasGroups(note.entries) && 
+                                <p>{`Cost (Groups): ${reduceGroupEntries(note.entries)}:-`}</p>
+                            }
+                            {hasChecked(note.entries) && 
+                                <p>{`Cost (Checked): ${reduceCheckedEntries(note.entries)}:-`}</p>
+                            }
                         </div>
                         <div className={['rounded-b-lg', 'p-2', 'bg-third', 'shadow-md'].join(' ')}>
                             <p>More info to be added...</p>

@@ -3,7 +3,8 @@ import {
     generateUUID, 
     isGroup, 
     hasGroups, 
-    reduceEntries 
+    reduceEntries,
+    reduceGroupEntries
 } from "../../utils/helpers";
 import { 
     saveNote 
@@ -133,7 +134,7 @@ export default function Note(props: NoteProps): JSX.Element {
             <div className={['NoteFooter', 'mt-4'].join(' ')}>
                 <div className={['inline-block', 'py-2'].join(' ')}>
                     {reduceEntries(props.note.entries) > 0 ? `Total: ${reduceEntries(props.note.entries)}:-` : ''}
-                    {hasGroups(props.note.entries) && reduceEntries(props.note.entries) > 0 && (<><br/>{`Total (Groups): ${reduceEntries(props.note.entries.filter((e: EntryType|GroupType) => isGroup(e)))}:-`}</>)}
+                    {hasGroups(props.note.entries) && reduceEntries(props.note.entries) > 0 && (<><br/>{`Total (Groups): ${reduceGroupEntries(props.note.entries)}:-`}</>)}
                 </div>
                 <span className={['p-1', 'inline', 'float-right', 'rounded-lg', 'shadow-lg', 'bg-third'].join(' ')}>
                     {props.note.editable ? 

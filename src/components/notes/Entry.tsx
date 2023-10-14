@@ -134,10 +134,8 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                         maxLength={5}
                         defaultValue={entry.price} 
                         onBlur={(e) => {
-                            console.warn('e.target.value', e.target.value);
                             if (e.target.value.length <= 5) {
                                 let value = parseFloat(e.target.value);
-                                console.warn('(e.target.value && value && !isNaN(value) && !Number.isNaN(value))', (e.target.value && value && !isNaN(value) && !Number.isNaN(value)));
                                 updateEntry('price', (e.target.value && value && !isNaN(value) && !Number.isNaN(value)) ? 
                                     parseFloat(e.target.value) : 
                                     'deleteValueIfPresent');
