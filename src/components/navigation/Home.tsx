@@ -37,7 +37,7 @@ export default function Home(props: any): JSX.Element {
                 <NotesIcon fontSize='large' className={'float-left'}/>
                 <span>{Pages.Notes}</span>
             </div>
-            <div onClick={() => props.setCurrentPage(Pages.Import)} className={buttonClasses}>
+            <div onClick={(e) => { props.setCurrentPage(Pages.Import); console.log('e.isTrusted (For clipboard access)',  e.isTrusted); }} className={buttonClasses}>
                 <DownloadIcon fontSize='large' className={'float-left'}/>
                 <span>{Pages.Import}</span>
             </div>

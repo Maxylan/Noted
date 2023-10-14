@@ -1,9 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Note, { useNoteProps } from '../notes/Note';
 import ListNotes from '../notes/ListNotes';
+import Import from '../notes/Import';
 import Pages from '../../types/pages';
 import Home from './Home';
 import HouseIcon from '@mui/icons-material/House';
+import NotesIcon from '@mui/icons-material/Notes';
 /**
  * @license     MIT License
  * @author      Maxylan
@@ -37,7 +39,9 @@ export default function Menu(): JSX.Element {
                                 setCurrentPage={setCurrentPage}/>
                         );
                         case Pages.Import: return (
-                            <></>
+                            <Import 
+                                load={note.load} 
+                                setCurrentPage={setCurrentPage}/>
                         );
                         default: return (
                             <Home currentPage={currentPage} 
@@ -47,12 +51,21 @@ export default function Menu(): JSX.Element {
                         );
                     }
                 })(currentPage)}
-                {currentPage === Pages.Home|| (
-                    <span
-                        onClick={() => setCurrentPage(Pages.Home)}
-                        className={(window.innerWidth < 768 ? 'bottom-4 left-4' : 'top-4 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-lg', 'bg-third'].join(' ')}>
-                        <HouseIcon fontSize='large' className='text-primary'/>
-                    </span>
+                {currentPage === Pages.Home || (
+                    <>
+                        <div
+                            onClick={() => setCurrentPage(Pages.Home)}
+                            className={(window.innerWidth < 768 ? 'bottom-4 left-4' : 'top-4 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-lg', 'bg-third', 'hover:bg-highlight'].join(' ')}>
+                            <HouseIcon fontSize='large' className='text-primary'/>
+                        </div>
+                        {currentPage !== Pages.Notes && 
+                            <div
+                                onClick={() => setCurrentPage(Pages.Notes)}
+                                className={(window.innerWidth < 768 ? 'bottom-4 left-24' : 'top-24 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-lg', 'bg-third', 'hover:bg-highlight'].join(' ')}>
+                                <NotesIcon fontSize='large' className='text-primary'/>
+                            </div>
+                        }
+                    </>
                 )}
             </div>
         </>

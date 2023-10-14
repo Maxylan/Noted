@@ -82,10 +82,33 @@ export const reduceCheckedEntries = (entries: (Group|Entry)[]): number => {
     }));
 }
 
-export const toBase64 = (entries: Note|string): string => {
-    if (typeof entries !== 'string') {
-        entries = JSON.stringify(entries, null, 0);
+export const toBase64 = (note: Note|string): string => {
+    if (typeof note !== 'string') {
+        note = JSON.stringify(note, null, 0);
     }
 
-    return btoa(entries);
+    return btoa(note);
+}
+export const fromBase64 = (bejo: string): any => {
+    if (typeof bejo !== 'string') {
+        throw new Error('fromBase64: argument must be a string');
+    }
+
+    return JSON.parse(atob(bejo));
+}
+export const noteFromBEJO = (bejo: string): Note|false => {
+    if (typeof bejo !== 'string') {
+        throw new Error('fromBase64: argument must be a string');
+    }
+
+    let note = JSON.parse(atob(bejo));
+    return (
+        note &&
+        note.id &&
+        note.title &&
+        note.entries &&
+        note.created &&
+        note.updated ?  
+        note : false
+    );
 }
