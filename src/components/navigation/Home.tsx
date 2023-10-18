@@ -16,7 +16,7 @@ const buttonClasses = ['w-full', 'h-fit', 'my-4', 'py-4', 'px-2', 'text-2xl', 'r
 
 export default function Home(props: any): JSX.Element {
     return (
-        <div className={['Home', 'max-w-xs', 'h-full', 'flex', 'flex-col'].join(' ')}>
+        <div className={['Home', 'max-w-xs', 'h-full', 'flex', 'flex-col', 'justify-center'].join(' ')}>
             <img 
                 className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}
                 src={'https://placehold.co/600x400'} 
