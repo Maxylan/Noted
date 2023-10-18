@@ -65,6 +65,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
     const [notes, setNotes] = useState<(Note[])[]>([]);
     const [search, setSearchValue] = useState<string>('');
     const [monthsToFetch, setMonthsToFetch] = useState(4);
+    const [endReached, setEndReached] = useState<boolean>(false);
 
     const bodyOnClickEventHandler = function (e: MouseEvent) {
         // WHAT THE ACTUAL F$@* IS THIS?!
@@ -107,6 +108,9 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
             let monthlyNotes = getNotes(`${y}_${m - i}`);
             if (monthlyNotes) { 
                 _notes.push(Object.values(monthlyNotes));
+            } else {
+                setEndReached(true);
+                break;
             }
         }
         
@@ -160,7 +164,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                 let [y, m] = dateKey().split('_').map((n) => parseInt(n)); // year + month extrapolated from dateKey().
                 if (m - i < 1) { y -= 1; m = 12; }
                 return (
-                    <div key={generateUUID()} className={['h-fit', 'w-full', 'rounded-lg', 'bg-secondary', 'py-2', 'mb-8', 'shadow-inner', 'shadow-inner-lg'].join(' ')}>
+                    <div key={generateUUID()} className={['h-fit', 'w-full', 'rounded-lg', 'bg-secondary', 'py-2', 'shadow-inner', 'shadow-inner-lg'].join(' ')}>
                         <div className={['h-fit', 'text-2xl', 'mt-2', 'mb-4', 'mx-4'].join(' ')}>
                             <span className={['inline-block'].join(' ')}>{`${y} - ${getMonthName(m)}`}</span>
                             <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')} onClick={() => showMonthlyInfo({year: y, month: m, name: getMonthName(m)!, notes: monthlyNotes})}/>
@@ -201,9 +205,11 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                 );
             })}
             <div className={['w-full', 'h-fit', 'flex', 'flex-col', 'items-center'].join(' ')}>
-                <button 
-                    className={['w-3/4', 'h-fit', 'p-[0.25rem]', 'text-lg', 'rounded-lg', 'bg-secondary', 'shadow-sm', 'hover:shadow-md'].join(' ')}
-                    onClick={() => setMonthsToFetch(oldValue => oldValue + 4)}>Load more..</button>
+                {endReached || (
+                    <button 
+                        className={['mt-8', 'w-3/4', 'h-fit', 'p-[0.25rem]', 'text-lg', 'rounded-lg', 'bg-secondary', 'shadow-sm', 'hover:shadow-md'].join(' ')}
+                        onClick={() => setMonthsToFetch(oldValue => oldValue + 4)}>Load more..</button>
+                )}
             </div>
             <Modal visible={visibilityMonthlyDetails} setVisibility={setVisibilityMonthlyDetails}>
                 {month && <>
