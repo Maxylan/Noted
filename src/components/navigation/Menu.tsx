@@ -2,10 +2,12 @@ import React, { useContext, useState, useEffect } from 'react';
 import Note, { useNoteProps } from '../notes/Note';
 import ListNotes from '../notes/ListNotes';
 import Import from '../notes/Import';
+import Settings from './Settings';
 import Pages from '../../types/pages';
 import Home from './Home';
 import HouseIcon from '@mui/icons-material/House';
 import NotesIcon from '@mui/icons-material/Notes';
+import AddIcon from '@mui/icons-material/Add';
 /**
  * @license     MIT License
  * @author      Maxylan
@@ -44,6 +46,9 @@ export default function Menu(): JSX.Element {
                                 load={note.load} 
                                 setCurrentPage={setCurrentPage}/>
                         );
+                        case Pages.Settings: return (
+                            <Settings />
+                        );
                         default: return (
                             <Home currentPage={currentPage} 
                                 setCurrentPage={setCurrentPage} 
@@ -64,6 +69,13 @@ export default function Menu(): JSX.Element {
                                 onClick={() => setCurrentPage(Pages.Notes)}
                                 className={(window.innerWidth < 768 ? 'bottom-4 left-24' : 'top-24 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-lg', 'bg-third', 'hover:bg-highlight'].join(' ')}>
                                 <NotesIcon fontSize='large' className='text-primary'/>
+                            </div>
+                        }
+                        {currentPage === Pages.Notes && 
+                            <div
+                                onClick={() => { note.reset(); setCurrentPage(Pages.EditNote); }}
+                                className={(window.innerWidth < 768 ? 'bottom-4 left-24' : 'top-24 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-lg', 'bg-third', 'hover:bg-highlight'].join(' ')}>
+                                <AddIcon fontSize='large' className='text-primary'/>
                             </div>
                         }
                     </>

@@ -72,18 +72,18 @@ export default function CreateEntrySelection({index, setEntries}: {
         <div className={['CreateEntrySelection'].join(' ')}>
             <span 
                 onClick={() => createEntry('text')}
-                className={['inline-block', 'w-fit', 'h-fit', 'my-2.5', 'mr-2.5', 'px-2', 'pb-1', 'shadow-md', 'hover:shadow-lg', 'rounded-md', 'border-2', 'border-highlight', (isSelectionInGroup() ? 'bg-highlight':'bg-third')].join(' ')}>
+                className={['inline-block', 'w-fit', 'h-fit', 'my-2.5', 'mr-2.5', 'px-2', 'pb-1', 'cursor-pointer', 'shadow-md', 'hover:shadow-lg', 'rounded-md', 'border-2', 'border-highlight', (isSelectionInGroup() ? 'bg-highlight':'bg-third')].join(' ')}>
                 <TitleIcon className={'text-primary'}/>
             </span>
             <span 
                 onClick={() => createEntry('checklist')}
-                className={['inline-block', 'w-fit', 'h-fit', 'm-2.5', 'px-2', 'pb-1', 'shadow-md', 'hover:shadow-lg', 'rounded-md', 'border-2', 'border-highlight', (isSelectionInGroup() ? 'bg-highlight':'bg-third')].join(' ')}>
+                className={['inline-block', 'w-fit', 'h-fit', 'm-2.5', 'px-2', 'pb-1', 'cursor-pointer', 'shadow-md', 'hover:shadow-lg', 'rounded-md', 'border-2', 'border-highlight', (isSelectionInGroup() ? 'bg-highlight':'bg-third')].join(' ')}>
                 <ChecklistIcon className={'text-primary'}/>
             </span>
             {!isSelectionInGroup() && 
                 <span 
                     onClick={() => createEntry('group')}
-                    className={['bg-third', 'inline-block', 'w-fit', 'h-fit', 'm-2.5', 'px-2', 'pb-1', 'shadow-md', 'hover:shadow-lg', 'rounded-md', 'border-2', 'border-highlight'].join(' ')}>
+                    className={['bg-third', 'inline-block', 'w-fit', 'h-fit', 'm-2.5', 'px-2', 'pb-1', 'cursor-pointer', 'shadow-md', 'hover:shadow-lg', 'rounded-md', 'border-2', 'border-highlight'].join(' ')}>
                     <AddIcon className={['text-primary'].join(' ')}/>
                 </span>
             }

@@ -61,10 +61,9 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
     const [visibilityNoteDetails, setVisibilityNoteDetails] = useState<boolean>(false);
     const [visibilityNoteExport, setVisibilityNoteExport] = useState<boolean>(false);
     const [visibilityConfirmDelete, setVisibilityConfirmDelete] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
 
-    const [search, setSearchValue] = useState<string>('');
     const [notes, setNotes] = useState<(Note[])[]>([]);
+    const [search, setSearchValue] = useState<string>('');
     const [monthsToFetch, setMonthsToFetch] = useState(4);
 
     const bodyOnClickEventHandler = function (e: MouseEvent) {
@@ -99,7 +98,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
     }, []);
 
     const fetchNotes = () => {
-        let _notes = [...notes];
+        let _notes: Note[][] = [];
 
         // year + month extrapolated from dateKey().
         let [y, m] = dateKey().split('_').map((n) => parseInt(n));
@@ -111,7 +110,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
             }
         }
         
-        setNotes(_notes);
+        setNotes(oldNotes => _notes);
     }
 
     useEffect(() => {
@@ -141,71 +140,71 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
         props.setCurrentPage(Pages.EditNote);
     }
     const deleteCurrentNote = () => {
-        setLoading(true); // To trigger a re-render.
+        // setLoading(true); // To trigger a re-render.
         props.resetCurrentNote(); // Reset internally stored "current note", if any.
         deleteNote(note!.id); // Delete note from localStorage. Also clears cache.
         setNote(undefined); // Reset note state in this ListNotes.
         setVisibilityConfirmDelete(false); // Hide the "confirm delete" prompt modal.
         fetchNotes(); // Refetch notes.
-        setLoading(false); // Render the list anew.
+        // setLoading(false); // Render the list anew.
     }
 
-    return loading ? (
-        <SyncIcon/>
-    ) : (
+    return (
         <div className={['ListNotes', 'w-full', 'text-2xl', 'text-left'].join(' ')}>
             <input className={['Search', 'w-3/4', 'text-xl', 'mb-4', 'rounded-sm', 'shadow-inner', 'shadow-inner-md', 'inline-block'].join(' ')}
                 type='text'
                 onChange={(e) => setSearchValue(e.target.value)}
                 value={search}/>
             <SearchOutlinedIcon className={['inline-block', 'ml-2'].join(' ')}/>
-            {(() => {
+            {notes.map((monthlyNotes, i) => {
                 let [y, m] = dateKey().split('_').map((n) => parseInt(n)); // year + month extrapolated from dateKey().
-                return notes.map((monthlyNotes, i) => {
-                    if (m - i < 1) { y -= 1; m = 12; }
-                    return (
-                        <div key={generateUUID()} className={['h-fit', 'w-full', 'rounded-lg', 'bg-secondary', 'py-2', 'mb-8', 'shadow-inner', 'shadow-inner-lg'].join(' ')}>
-                            <div className={['h-fit', 'text-2xl', 'mt-2', 'mb-4', 'mx-4'].join(' ')}>
-                                <span className={['inline-block'].join(' ')}>{`${y} - ${getMonthName(m)}`}</span>
-                                <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')} onClick={() => showMonthlyInfo({year: y, month: m, name: getMonthName(m)!, notes: monthlyNotes})}/>
-                            </div>
-                            {monthlyNotes.reverse().filter((_note) => {
-                                return _note.title.toLowerCase().includes(search.toLowerCase()) || _note.entries.some((entry) => isGroup(entry) && entry.title.toLowerCase().includes(search.toLowerCase()));
-                            }).map((_note) => (
-                                <div key={generateUUID()} className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'pl-8', 'pr-4', 'py-[0.25rem]', 'mx-2', 'flex'].join(' ')}>
-                                    <span className={['inline-block', 'w-full'].join(' ')} onClick={(e) => { e.stopPropagation(); props.load(_note); props.setCurrentPage(Pages.EditNote); }}>
-                                        {_note.title}
-                                    </span>
-                                    <div className='Dropdown relative' id={`dropdown_${_note.id}`} style={{display: 'none'}}>
-                                        <div className={['bg-secondary', 'w-32', 'h-fit', 'absolute', 'left-[-4rem]', 'top-8', 'rounded-lg', 'shadow-lg'].join(' ')}>
-                                            <div className={['flex', 'flex-col'].join(' ')}>
-                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-t-lg'].join(' ')} onClick={() => showNoteInfo(_note)}>Info</div>
-                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')} onClick={() => editNote(_note)}>Edit</div>
-                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')} onClick={() => showNoteData(_note)}>Export</div>
-                                                <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-b-lg'].join(' ')} onClick={() => showConfirmDeleteNote(_note)}>Delete</div>
-                                            </div>
-                                        </div>
-                                        <div className={['bg-secondary', 'rotate-45', 'w-6', 'h-6', 'absolute', 'left-[-3.66rem]', 'top-6'].join(' ')} />
-                                    </div>
-                                    <button onClick={() => {
-                                            let element = document.getElementById(`dropdown_${_note.id}`);
-                                            if (element) {
-                                                if (element.style.display === 'none') {
-                                                    element.style.display = 'initial';
-                                                } else {
-                                                    element.style.display = 'none';
-                                                }
-                                            }
-                                        }}>
-                                        <MoreHorizOutlinedIcon className={['More', 'inline-block', 'mx-4'].join(' ')} />
-                                    </button>
-                                </div>
-                            ))}
+                if (m - i < 1) { y -= 1; m = 12; }
+                return (
+                    <div key={generateUUID()} className={['h-fit', 'w-full', 'rounded-lg', 'bg-secondary', 'py-2', 'mb-8', 'shadow-inner', 'shadow-inner-lg'].join(' ')}>
+                        <div className={['h-fit', 'text-2xl', 'mt-2', 'mb-4', 'mx-4'].join(' ')}>
+                            <span className={['inline-block'].join(' ')}>{`${y} - ${getMonthName(m)}`}</span>
+                            <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')} onClick={() => showMonthlyInfo({year: y, month: m, name: getMonthName(m)!, notes: monthlyNotes})}/>
                         </div>
-                    );
-                });
-            })()}
-            <button onClick={() => setMonthsToFetch(oldValue => oldValue + 4)}></button>
+                        {[...monthlyNotes].reverse().filter((_note) => {
+                            return _note.title.toLowerCase().includes(search.toLowerCase()) || _note.entries.some((entry) => isGroup(entry) && entry.title.toLowerCase().includes(search.toLowerCase()));
+                        }).map((_note) => (
+                            <div key={generateUUID()} className={['text-lg', 'bg-third', 'hover:bg-highlight', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'my-2', 'pl-8', 'pr-4', 'py-[0.25rem]', 'mx-2', 'flex', 'cursor-pointer', 'select-none'].join(' ')}>
+                                <span className={['inline-block', 'w-full'].join(' ')} onClick={(e) => { e.stopPropagation(); props.load(_note); props.setCurrentPage(Pages.EditNote); }}>
+                                    {_note.title}
+                                </span>
+                                <div className='Dropdown relative' id={`dropdown_${_note.id}`} style={{display: 'none'}}>
+                                    <div className={['bg-secondary', 'w-32', 'h-fit', 'absolute', 'left-[-4rem]', 'top-8', 'rounded-lg', 'shadow-lg'].join(' ')}>
+                                        <div className={['flex', 'flex-col'].join(' ')}>
+                                            <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-t-lg'].join(' ')} onClick={() => showNoteInfo(_note)}>Info</div>
+                                            <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')} onClick={() => editNote(_note)}>Edit</div>
+                                            <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third'].join(' ')} onClick={() => showNoteData(_note)}>Export</div>
+                                            <div className={['Button', 'block', 'w-full', 'z-10', 'px-4', 'py-2', 'bg-secondary', 'hover:bg-third', 'rounded-b-lg'].join(' ')} onClick={() => showConfirmDeleteNote(_note)}>Delete</div>
+                                        </div>
+                                    </div>
+                                    <div className={['bg-secondary', 'rotate-45', 'w-6', 'h-6', 'absolute', 'left-[-3.66rem]', 'top-6'].join(' ')} />
+                                </div>
+                                <div onClick={() => {
+                                        let element = document.getElementById(`dropdown_${_note.id}`);
+                                        if (element) {
+                                            if (element.style.display === 'none') {
+                                                element.style.display = 'initial';
+                                            } else {
+                                                element.style.display = 'none';
+                                            }
+                                        }
+                                    }}>
+                                    <MoreHorizOutlinedIcon className={['More', 'inline-block', '!w-10'].join(' ')} />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                );
+            })}
+            <div className={['w-full', 'h-fit', 'flex', 'flex-col', 'items-center'].join(' ')}>
+                <button 
+                    className={['w-3/4', 'h-fit', 'p-[0.25rem]', 'text-lg', 'rounded-lg', 'bg-secondary', 'shadow-sm', 'hover:shadow-md'].join(' ')}
+                    onClick={() => setMonthsToFetch(oldValue => oldValue + 4)}>Load more..</button>
+            </div>
             <Modal visible={visibilityMonthlyDetails} setVisibility={setVisibilityMonthlyDetails}>
                 {month && <>
                     <p>{`${month.year}/${month.month} (${month.name})`}</p>
@@ -281,5 +280,5 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                 }
             </Modal>
         </div>
-    )
+    );
 } 

@@ -24,8 +24,8 @@ export const argToDate = (arg: string | number | Date): string => {
     let d = new Date(arg);
     return date(d);
 }
-export const dateKey = () => {
-    let d = new Date();
+export const dateKey = (arg: string | number | Date | undefined = undefined) => {
+    let d = arg ? new Date(arg) : new Date();
     return d.getFullYear() + '_' + (d.getMonth() + 1);
 };
 export const getMonthName = (month: number) => {

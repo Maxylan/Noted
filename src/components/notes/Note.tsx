@@ -136,12 +136,12 @@ export default function Note(props: NoteProps): JSX.Element {
                     {reduceEntries(props.note.entries) > 0 ? `Total: ${reduceEntries(props.note.entries)}:-` : ''}
                     {hasGroups(props.note.entries) && reduceEntries(props.note.entries) > 0 && (<><br/>{`Total (Groups): ${reduceGroupEntries(props.note.entries)}:-`}</>)}
                 </div>
-                <span className={['p-1', 'inline', 'float-right', 'rounded-lg', 'shadow-lg', 'bg-highlight'].join(' ')}>
+                <div className={['p-1', 'inline', 'float-right', 'rounded-lg', 'shadow-md', 'hover:shadow-lg', 'bg-highlight', 'cursor-pointer'].join(' ')}>
                     {props.note.editable ? 
                         (<DoneIcon fontSize='large' className='text-primary' onClick={() => props.setEditable(oldValue => !oldValue)}/>):
                         (<EditIcon fontSize='large' className='text-primary' onClick={() => props.setEditable(oldValue => !oldValue)}/>)
                     }
-                </span>
+                </div>
             </div>
             <div className={['NoteDebug', 'mt-8'].join(' ')}>
                 {props.note.debug && (
