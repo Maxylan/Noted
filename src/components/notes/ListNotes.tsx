@@ -167,7 +167,7 @@ export default function ListNotes(props: ListNotesProps): JSX.Element {
                     <div key={generateUUID()} className={['h-fit', 'w-full', 'rounded-lg', 'bg-secondary', 'py-2', 'shadow-inner', 'shadow-inner-lg'].join(' ')}>
                         <div className={['h-fit', 'text-2xl', 'mt-2', 'mb-4', 'mx-4'].join(' ')}>
                             <span className={['inline-block'].join(' ')}>{`${y} - ${getMonthName(m)}`}</span>
-                            <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[2.5px]'].join(' ')} onClick={() => showMonthlyInfo({year: y, month: m, name: getMonthName(m)!, notes: monthlyNotes})}/>
+                            <InfoOutlinedIcon className={['inline-block', 'float-right', 'mt-[6px]', 'cursor-pointer'].join(' ')} onClick={() => showMonthlyInfo({year: y, month: m, name: getMonthName(m)!, notes: monthlyNotes})}/>
                         </div>
                         {[...monthlyNotes].reverse().filter((_note) => {
                             return _note.title.toLowerCase().includes(search.toLowerCase()) || _note.entries.some((entry) => isGroup(entry) && entry.title.toLowerCase().includes(search.toLowerCase()));
