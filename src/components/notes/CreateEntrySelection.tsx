@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { useAuthorization } from '../../features/Authorization/Authorization';
+import { useAuthorization } from '../../features/api/api';
 import { isGroup } from "../../utils/helpers";
 import { 
     Note, 
