@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { useAuthorization } from '../../features/api/api';
+// import { useAuthorization } from '../../features/api/HttpWrapper';
 import { isGroup } from "../../utils/helpers";
 import { 
     Note, 
@@ -26,7 +26,7 @@ export default function CreateEntrySelection({index, setEntries}: {
     index: number|[number, number], 
     setEntries: React.Dispatch<React.SetStateAction<(Entry|Group)[]>>}
 ): JSX.Element {
-    const authorizationStatus = useAuthorization();
+    // const authorizationStatus = useAuthorization();
     const isSelectionInGroup = (): boolean => Array.isArray(index);
     const newEntry = (checkbox: boolean = false): Entry => {
         return (checkbox ? {
