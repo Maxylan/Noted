@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { useAuthorization } from '../../features/Authorization/Authorization';
+// import { useAuthorization } from '../../features/api/HttpWrapper';
 import { isGroup } from "../../utils/helpers";
 import { 
     Note as NoteType, 
@@ -44,7 +44,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
     const [priceIsBeingEdited, setPriceIsBeingEdited] = useState<boolean>(false);
     const titleInputRef = useRef<any>();
     const priceInputRef = useRef<any>();
-    const authorizationStatus = useAuthorization();
+    // const authorizationStatus = useAuthorization();
 
     useEffect(() => { // For editing title/price
         if (titleIsBeingEdited) { titleInputRef.current?.focus(); }

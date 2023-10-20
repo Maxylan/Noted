@@ -61,20 +61,20 @@ export default function Menu(): JSX.Element {
                     <>
                         <div
                             onClick={() => setCurrentPage(Pages.Home)}
-                            className={(window.innerWidth < 768 ? 'bottom-4 left-4' : 'top-4 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-lg', 'bg-third', 'cursor-pointer', 'hover:bg-highlight'].join(' ')}>
+                            className={(window.innerWidth < 768 ? 'bottom-4 left-4' : 'top-4 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'bg-highlight', 'cursor-pointer'].join(' ')}>
                             <HouseIcon fontSize='large' className='text-primary'/>
                         </div>
                         {currentPage !== Pages.Notes && 
                             <div
                                 onClick={() => setCurrentPage(Pages.Notes)}
-                                className={(window.innerWidth < 768 ? 'bottom-4 left-24' : 'top-24 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-lg', 'bg-third', 'cursor-pointer', 'hover:bg-highlight'].join(' ')}>
+                                className={(window.innerWidth < 768 ? 'bottom-4 left-24' : 'top-24 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'bg-highlight', 'cursor-pointer'].join(' ')}>
                                 <NotesIcon fontSize='large' className='text-primary'/>
                             </div>
                         }
                         {currentPage === Pages.Notes && 
                             <div
                                 onClick={() => { note.reset(); setCurrentPage(Pages.EditNote); }}
-                                className={(window.innerWidth < 768 ? 'bottom-4 left-24' : 'top-24 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-lg', 'bg-third', 'cursor-pointer', 'hover:bg-highlight'].join(' ')}>
+                                className={(window.innerWidth < 768 ? 'bottom-4 left-24' : 'top-24 right-4') + ' ' + ['fixed', 'p-4', 'rounded-full', 'shadow-md', 'hover:shadow-lg', 'bg-highlight', 'cursor-pointer'].join(' ')}>
                                 <AddIcon fontSize='large' className='text-primary'/>
                             </div>
                         }
