@@ -19,10 +19,20 @@ export default function Home(props: any): JSX.Element {
     const status = useAuthorization();
     return (
         <div className={['Home', 'max-w-xs', 'h-full', 'flex', 'flex-col', 'justify-center'].join(' ')}>
-            <img 
-                className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}
-                src={status.health === 'healthy' ? `${Staffanshopper.grossconfig.HOST}${status.data.mobileImage.url}` : 'https://placehold.co/600x400'} 
-                alt='Staffanshopper' />
+            {status.health === 'healthy' ? (
+                <a href={`${Staffanshopper.grossconfig.HOST}${status.data.url}`} target='_blank' rel='noreferrer'>
+                    <img 
+                        className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}
+                        src={`${Staffanshopper.grossconfig.HOST}${status.data.mobileImage.url}`} 
+                        alt={`Staffanshopper (${status.data.address.city})`} />
+                </a>
+            ) : (
+                <img 
+                    className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}
+                    src='https://placehold.co/600x400' 
+                    alt='Staffanshopper' />
+            )}
+            
             {props.note.entries.length > 0 && 
                 <div onClick={() => props.setCurrentPage(Pages.EditNote)} className={buttonClasses}>
                     <EditIcon fontSize='large' className={'float-left'}/>
