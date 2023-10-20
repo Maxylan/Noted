@@ -16,6 +16,9 @@ import {
 
 const parsePriceFromPrices = (prices: any, store: number): Price => {
     let price = null, highestOrdinaryCost = 0;
+    if (!prices) {
+        console.warn('No prices found?', prices);
+    }
     for(let i = 0; i < prices.length; i++) 
     {
         if (prices[i].storeNumber === store) {
@@ -60,6 +63,7 @@ const convertToProduct = (product: any, store: number): Product => ({
     name: product.name,
     brand: product.brand,
     url: product.url,
+    id: product.id,
     category: {
         category: product.category,
         super: product.superCategory,
@@ -82,10 +86,61 @@ const convertToProduct = (product: any, store: number): Product => ({
 const useApiModule = (): ApiProps => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [products, setProducts] = useState<Product[]>([]);
+    const [provider, setProvider] = useState<number>(0);
     const [store, setStore] = useState<number>(0);
 
     return {
         api: {
+            /**
+             * Makes a request to get your recommended provider from the API.
+             * Always caches the result in sessionStorage.
+             * 
+             * @returns StdResponse<any>
+             */
+            provider: async (): Promise<StdResponse<any>> => {
+                setIsLoading(true);
+                let response, apiResponse;
+                let data = sessionStorage.getItem('staffanshopper_provider');
+                data = data ? JSON.parse(data) : null;
+                
+                if (data) {
+                    // Construct the stdResponse object from cached data
+                    apiResponse = {
+                        status: 'success',
+                        message: `${(data ? 'success' : 'error')}` + (data ? ': cached' : ''),
+                        data: data
+                    };
+                }
+                else {
+                    // Make the fetch.
+                    response = await fetch(
+                        `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/sites/11/storeNumber`
+                    ).catch(
+                        // Handle errors, like not being able to reach the host.
+                        // I guess just log it for now, I'll figure something out later.
+                        (error) => {
+                            console.error(error);
+                            return error;
+                        }
+                    );
+
+                    data = await response.json();
+                    sessionStorage.setItem('staffanshopper_provider', JSON.stringify(data));
+
+                    // Construct the stdResponse object
+                    apiResponse = {
+                        status: response.status,
+                        message: `${(response.status < 400? 'success' : 'error')}` + (response.statusText ? `: ${response.statusText}` : ''),
+                        data: data
+                    };
+                }
+
+                // Set loading back to false and return the stdResponse object
+                setIsLoading(false);
+                setProvider((apiResponse!.data as any)?.storeNumber)
+                return apiResponse;
+            },
+
             /**
              * Makes a request to get all stores from the API.
              * Always caches the result in sessionStorage.
@@ -181,16 +236,16 @@ const useApiModule = (): ApiProps => {
              * 
              * @returns 
              */
-            search: async (query: string, mode: 'normal'|'quick', page: number = 0): Promise<StdResponse<any>> => {
+            search: async (query: string, mode: 'normal'|'quick', page: number = 0, use: 'store'|'provider' = 'provider'): Promise<StdResponse<any>> => {
                 setIsLoading(true);
                 // Construct URL
                 let url = `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/esales/search`;
                 switch(mode) {
                     case 'normal':
-                        url += `/?Q=${query}&page=${page}&store=${store}`;
+                        url += `/?Q=${query}&page=${page}&store=${use === 'store' ? store : provider}`;
                         break;
                     case 'quick':
-                        url += `/?q=${query}&store=${store}`;
+                        url += `/?q=${query}&store=${use === 'store' ? store : provider}`;
                         break;
                 }
 
@@ -214,8 +269,8 @@ const useApiModule = (): ApiProps => {
                 };
 
                 // Special operations.
-                if (Array.isArray(apiResponse.data)) {
-                    apiResponse.data = apiResponse.data.map(convertToProduct);
+                if (Array.isArray(apiResponse.data.data)) {
+                    apiResponse.data = apiResponse.data.data.map(convertToProduct);
                 }
 
                 // Set loading back to false and return the stdResponse object

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-// import { useAuthorization } from '../../features/api/HttpWrapper';
+import { useApi, useAuthorization, useDebounce } from '../../features/api/HttpWrapper';
 import { isGroup } from "../../utils/helpers";
 import { 
     Note as NoteType, 
@@ -8,6 +8,8 @@ import {
 } from '../../types/Notes';
 import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Modal from '../misc/Modal';
+import { Product } from '../../types/api';
 /**
  * @license     MIT License
  * @author      Maxylan
@@ -40,11 +42,20 @@ export interface EntryProps extends JSX.IntrinsicAttributes {
  * @returns 
  */
 export default function Entry({entry, editable, index, setEntries}: EntryProps): JSX.Element {
+    const [title, setTitle] = useState<string>(entry.title);
     const [titleIsBeingEdited, setTitleIsBeingEdited] = useState<boolean>(false);
     const [priceIsBeingEdited, setPriceIsBeingEdited] = useState<boolean>(false);
     const titleInputRef = useRef<any>();
     const priceInputRef = useRef<any>();
-    // const authorizationStatus = useAuthorization();
+    const status = useAuthorization();
+    const api = useApi() as {
+        [key: string]: any /* I don't know how to define variable amount of arguments! :D ({...args}) => Promise<StdResponse<any>> */;
+    };
+    const [result, loading, debounce] = useDebounce((value) => {
+        if (value && status.health === 'healthy') {
+            return api.search(value, 'quick');
+        }
+    }, 1000);
 
     useEffect(() => { // For editing title/price
         if (titleIsBeingEdited) { titleInputRef.current?.focus(); }
@@ -83,8 +94,14 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
         });
     }
 
-    const updateTitle = (e: React.FocusEvent) => { 
-        e.stopPropagation(); 
+    const updateTitle = (e: /*React.FocusEvent|undefined*/ any = undefined) => { 
+        if (!e) {
+            e = {target: titleInputRef.current}
+        }
+        else {
+            e.stopPropagation(); 
+        }
+
         setTimeout(() => {
             let value = (e.target as HTMLInputElement).value;
 
@@ -109,20 +126,49 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                 className={['flex-auto', 'w-full'].join(' ')}
                 onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}>
                 {titleIsBeingEdited ? (
-                    <input 
-                        id={'titleInput'}
-                        ref={titleInputRef}
-                        onBlur={updateTitle}
-                        type='text' 
-                        maxLength={40}
-                        className={['w-48'].join(' ')}
-                        defaultValue={entry.title}  />
+                    status.health === 'healthy' && window.innerWidth >= 768 ? (
+                        <input 
+                            id={'titleInput'}
+                            ref={titleInputRef}
+                            onBlur={updateTitle}
+                            type='text' 
+                            maxLength={40}
+                            className={['w-48'].join(' ')}
+                            defaultValue={entry.title} />
+                    ) : (
+                        <Modal visible={true} setVisibility={() => {updateTitle(); setTitleIsBeingEdited(false);}}>
+                            <span className='items-center align-center justify-center'>
+                                <input 
+                                    type='text' 
+                                    id={'titleInput'}
+                                    ref={titleInputRef}
+                                    className={['inline-block', 'w-48'].join(' ')}
+                                    maxLength={40}
+                                    onChange={(e) => {
+                                        debounce(e.target.value);
+                                        setTitle(e.target.value);
+                                    }}
+                                    value={title} />
+                                <DeleteIcon className={['inline-block', 'text-scrap', 'ml-4'].join(' ')} onClick={() => updateEntry(undefined, undefined)}/>
+                            </span>
+                            <div className={['max-h-96', 'overflow-auto'].join(' ')}>
+                                {loading ? <img src='/loader.svg' className='w-24 m-auto' alt='Loading..'/> : (
+                                <ul>
+                                    {(result && result.data) && result.data.map((product: Product) => 
+                                        <li key={product.id}>
+                                            <a href={`${Staffanshopper.grossconfig.HOST}${product.url}`} target='_blank' rel='noreferrer'>{`${product.name} - ${product.price.current}:-`}</a>
+                                        </li>
+                                    )}
+                                </ul>)}
+                            </div>
+                        </Modal>
+                    )
                 ) : (
                     <div className={['inline-block', 'max-w-[12rem]'].join(' ')}>{ entry.title }</div>
                 )}
             </div>
             <div className={'flex-none'} onClick={editable ? () => setPriceIsBeingEdited(true) : undefined}>
-                {titleIsBeingEdited ? (
+                {titleIsBeingEdited && window.innerWidth >= 768 ? (
                     <DeleteIcon className={['inline-block', 'text-scrap'/*, 'w-4', 'h-4'*/].join(' ')} onClick={() => updateEntry(undefined, undefined)}/>
                 ) : (
                 priceIsBeingEdited ? (
