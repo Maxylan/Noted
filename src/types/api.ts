@@ -44,29 +44,36 @@ export interface Product {
         super: string;
         bf: string;
     };
-    image: {
+    cover: {
         url: string;
         alt: string;
     };
+    images: {
+        url: string;
+        alt: string;
+    }[];
     /** `.tags` Can contain a tag with `.name` = "LAGT_PRIS" **or** `.namespace` = "LÄGRE_PRIS" */
     lowPrice: boolean;
     /** Price details */
-    price: {
-        /** Current price (Note: Check "updated" to see when "current" was set) */
-        current: number,
-        /** Ordinary price */
-        ordinary: number,
-        /** DateTime when price was set. */
-        updated: string,
-        /** Is there currently* a promotion? (*Note: Check "updated" to see when the promotion may have been) */
-        promotion: undefined|{
-            from: string,
-            to: string,
-            minAmount: number|undefined,
-            minQuantity: number|undefined,
-            value: number,
-            price: number,
-        }
+    price: Price
+}
+export interface Price {
+    /** Current price (Note: Check "updated" to see when "current" was set) */
+    current: number,
+    /** Ordinary price */
+    ordinary: number,
+    /** Price unit */
+    unit: string,
+    /** DateTime when price was set. */
+    updated: string,
+    /** Is there currently* a promotion? (*Note: Check "updated" to see when the promotion may have been) */
+    promotion: undefined|{
+        from: string,
+        to: string,
+        minAmount: number|undefined,
+        minQuantity: number|undefined,
+        value: number,
+        price: number,
     }
 }
 

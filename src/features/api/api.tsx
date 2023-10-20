@@ -1,7 +1,10 @@
 import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
 import { 
-    ApiProps, Endpoint, StdResponse, Product
+    ApiProps, Endpoint, StdResponse, Product, Price
 } from '../../types/api';
+import {
+    date
+} from '../../utils/helpers';
 /**
  * @license     MIT License
  * @author      Maxylan
@@ -11,10 +14,70 @@ import {
  * publically-available CityGross API.
  */
 
-const convertToProduct = (product: any): Product => {
+const parsePriceFromPrices = (prices: any, store: number): Price => {
+    let price = null, highestOrdinaryCost = 0;
+    for(let i = 0; i < prices.length; i++) 
+    {
+        if (prices[i].storeNumber === store) {
+            price = prices[i];
+            break;
+        } 
+        else if (prices[i].ordinaryPrice.price > highestOrdinaryCost) {
+            price = prices[i];
+            // Don't break! Keep checking.
+        }
+    }
 
-    return product;
-};
+    let promotions = [...price.promotions, ...price.promotions2].filter((promo: any) => {
+        // promo.from (ISO DateTime stamp) must be > now and promo.to (ISO DateTime stamp) must be < now
+        return new Date(promo.from) > new Date() && new Date(promo.to) < new Date();
+    });
+    if (promotions.length > 0) {
+        console.log('Promos found!', promotions);
+    }
+
+    return {
+        /** Current price (Note: Check "updated" to see when "current" was set) */
+        current: price.currentPrice.price,
+        /** Ordinary price */
+        ordinary: price.ordinaryPrice.price,
+        /** Ordinary price */
+        unit: price.ordinaryPrice.unit,
+        /** DateTime when price was set. */
+        updated: date(),
+        /** Is there currently* a promotion? (*Note: Check "updated" to see when the promotion may have been) */
+        promotion: promotions.length ? {
+            from: promotions[0].from,
+            to: promotions[0].to,
+            minAmount: promotions[0].minAmount ?? undefined,
+            minQuantity: promotions[0].minQuantity ?? undefined,
+            value: promotions[0].value,
+            price: promotions[0].priceDetails.price,
+        } : undefined
+    };
+}
+const convertToProduct = (product: any, store: number): Product => ({
+    name: product.name,
+    brand: product.brand,
+    url: product.url,
+    category: {
+        category: product.category,
+        super: product.superCategory,
+        bf: product.bfCategory,
+    },
+    cover: {
+        url: product.images[0]?.url,
+        alt: product.images[0]?.alt,
+    },
+    images: product.images.map((i: any) => ({
+        url: i?.url,
+        alt: i?.alt,
+    })),
+    /** `.tags` Can contain a tag with `.name` = "LAGT_PRIS" **or** `.namespace` = "LÄGRE_PRIS" */
+    lowPrice: product.tags?.some((tag: any) => tag?.namespace === 'LÄGRE_PRIS' || tag?.name === 'LAGT_PRIS'),
+    /** Price details */
+    price: parsePriceFromPrices(product.prices, store)
+});
 
 const useApiModule = (): ApiProps => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -105,8 +168,8 @@ const useApiModule = (): ApiProps => {
                 };
 
                 // Special operations.
-                if (Array.isArray(apiResponse.data)) {
-                    apiResponse.data = apiResponse.data.map(convertToProduct);
+                if (Array.isArray(apiResponse.data.data)) {
+                    apiResponse.data = apiResponse.data.data.map(convertToProduct);
                 }
 
                 // Set loading back to false and return the stdResponse object

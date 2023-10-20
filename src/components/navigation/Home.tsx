@@ -6,6 +6,7 @@ import NotesIcon from '@mui/icons-material/Notes';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import DownloadIcon from '@mui/icons-material/Download';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { useAuthorization } from '../../features/api/HttpWrapper';
 /**
  * @license     MIT License
  * @author      Maxylan
@@ -15,11 +16,12 @@ import SettingsIcon from '@mui/icons-material/Settings';
 const buttonClasses = ['w-full', 'h-fit', 'my-4', 'py-4', 'px-2', 'text-2xl', 'rounded-md', 'bg-secondary', 'shadow-md', 'hover:shadow-lg', 'md:cursor-pointer'].join(' ');
 
 export default function Home(props: any): JSX.Element {
+    const status = useAuthorization();
     return (
         <div className={['Home', 'max-w-xs', 'h-full', 'flex', 'flex-col', 'justify-center'].join(' ')}>
             <img 
                 className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}
-                src={'https://placehold.co/600x400'} 
+                src={status.health === 'healthy' ? `${Staffanshopper.grossconfig.HOST}${status.data.mobileImage.url}` : 'https://placehold.co/600x400'} 
                 alt='Staffanshopper' />
             {props.note.entries.length > 0 && 
                 <div onClick={() => props.setCurrentPage(Pages.EditNote)} className={buttonClasses}>
