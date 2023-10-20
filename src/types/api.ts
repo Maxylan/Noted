@@ -25,7 +25,7 @@ export interface ApiProps {
 };
 
 export interface StdResponse<T> {
-    status: 'success' | 'error';
+    status: number | 'success' | 'error';
     message: string;
     data: T|undefined;
 }

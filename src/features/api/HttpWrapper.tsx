@@ -35,7 +35,7 @@ export default function HttpWrapper(props: any): JSX.Element {
         data: null
     });
 
-    const {api, isLoading, products} = useApiModule();
+    const {api, isLoading, setStore, products} = useApiModule();
 
     useEffect(() => {
         console.log('Staffanshopper.grossconfig (Extended window object working)', Staffanshopper.grossconfig);
@@ -43,8 +43,14 @@ export default function HttpWrapper(props: any): JSX.Element {
         if (!status.data || status.health === 'unknown') {
             // Get the Staffanstorp store. This'll also ensure that the API is healthy. Two birds one stone baby.
             try {
-                status.data = api.stores();
-                status.health = 'healthy';
+                api.stores('Staffanstorp').then((res: any) => {
+                    status.health = (res.status === 'success' || res.status < 300) && res.data ? 'healthy' : 'unhealthy';
+                    status.data = res.data;
+                    if (status.health === 'healthy') {
+                        setStore(status.data.id);
+                    }
+                    // console.log('res', res);
+                });
             }
             catch (e) {
                 status.health = 'unhealthy';
@@ -68,6 +74,22 @@ export default function HttpWrapper(props: any): JSX.Element {
                 </div>
             ) : (
                 <Api.Provider value={api}>
+                    {window.innerWidth >= 768 && 
+                        <span className={['Status', 'absolute', 'top-0', 'right-8', 'text-[rgba(128,128,128,0.75)]', 'text-sm', 'select-none'].join(' ')}>
+                            <pre>
+                                {
+                                    (status.health === 'healthy' ? '🟢' : '🔴') + 
+                                    (status.data && status.data.id ? status.data.id : ' No store')
+                                }
+                                {status.health === 'healthy' && (
+                                    <>
+                                        <br/>
+                                        <a href={`${Staffanshopper.grossconfig.HOST}${status.data.url}`}>{`${status.data.address.city}`}</a>
+                                    </>
+                                )}
+                            </pre>
+                        </span>
+                    }
                     {props.children}
                 </Api.Provider>
             )}

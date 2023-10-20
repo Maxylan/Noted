@@ -11,6 +11,10 @@ import {
  * publically-available CityGross API.
  */
 
+const convertToProduct = (product: any): Product => {
+
+    return product;
+};
 
 const useApiModule = (): ApiProps => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -20,58 +24,103 @@ const useApiModule = (): ApiProps => {
     return {
         api: {
             /**
+             * Makes a request to get all stores from the API.
+             * Always caches the result in sessionStorage.
              * 
-             * @returns 
+             * Pass `storeToFind` to pluck a specific store from the array.
+             * 
+             * @returns StdResponse<any>
              */
-            stores: async () => {
+            stores: async (storeToFind: string|undefined = undefined): Promise<StdResponse<any>> => {
                 setIsLoading(true);
-
-                let stores = await fetch(
-                    `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/PageData/stores`
-                ).then(
-                    (r) => r.json()
-                ).catch(
-                    // Handle errors, like not being able to reach the host.
-                    (error) => {
+                let response, apiResponse;
+                let data = sessionStorage.getItem('staffanshopper_stores');
+                data = data ? JSON.parse(data) : null;
+                
+                if (data) {
+                    // Construct the stdResponse object from cached data
+                    apiResponse = {
+                        status: 'success',
+                        message: `${(data ? 'success' : 'error')}` + (data ? ': cached' : ''),
+                        data: data
+                    };
+                }
+                else {
+                    // Make the fetch.
+                    response = await fetch(
+                        `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/PageData/stores`
+                    ).catch(
+                        // Handle errors, like not being able to reach the host.
                         // I guess just log it for now, I'll figure something out later.
-                        console.error(error);
-                    }
-                );
+                        (error) => {
+                            console.error(error);
+                            return error;
+                        }
+                    );
 
-                // console.log('result', stores);
-                let staffanstorp = stores.find((s: any) => s.data.address.city === 'Staffanstorp');
+                    data = await response.json();
+                    sessionStorage.setItem('staffanshopper_stores', JSON.stringify(data));
 
+                    // Construct the stdResponse object
+                    apiResponse = {
+                        status: response.status,
+                        message: `${(response.status < 400? 'success' : 'error')}` + (response.statusText ? `: ${response.statusText}` : ''),
+                        data: data
+                    };
+                }
+
+                // Special operations.
+                if (storeToFind && Array.isArray(apiResponse.data)) {
+                    apiResponse.data = (apiResponse.data as any[]).find((s: any) => s.data.address.city === storeToFind)?.data;
+                }
+
+                // Set loading back to false and return the stdResponse object
                 setIsLoading(false);
-                console.log('Store', staffanstorp);
-                return staffanstorp.data;
+                return apiResponse;
             },
+
             /**
              * 
              * @returns 
              */
-            topsellers: async () => {
+            topsellers: async (): Promise<StdResponse<any>> => {
+                // Make the fetch.
                 setIsLoading(true);
-
-                let result = await fetch(
+                let response = await fetch(
                     `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/esales/topsellers?page=0&size=33`
-                ).then(
-                    (r) => r.json()
                 ).catch(
                     // Handle errors, like not being able to reach the host.
+                    // I guess just log it for now, I'll figure something out later.
                     (error) => {
-                        
+                        console.error(error);
+                        return error;
                     }
                 );
 
+                // Construct the stdResponse object
+                let apiResponse = {
+                    status: response.status,
+                    message: `${(response.status < 400? 'success' : 'error')}` + (response.statusText ? `: ${response.statusText}` : ''),
+                    data: await response.json()
+                };
+
+                // Special operations.
+                if (Array.isArray(apiResponse.data)) {
+                    apiResponse.data = apiResponse.data.map(convertToProduct);
+                }
+
+                // Set loading back to false and return the stdResponse object
                 setIsLoading(false);
-                return result;
+                return apiResponse;
             },
+
             /**
              * 
              * @returns 
              */
-            search: async (query: string, mode: 'normal'|'quick', page: number = 0) => {
+            search: async (query: string, mode: 'normal'|'quick', page: number = 0): Promise<StdResponse<any>> => {
                 setIsLoading(true);
+                // Construct URL
                 let url = `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/esales/search`;
                 switch(mode) {
                     case 'normal':
@@ -82,20 +131,33 @@ const useApiModule = (): ApiProps => {
                         break;
                 }
 
-                let results = await fetch(
+                // Make the fetch.
+                let response = await fetch(
                     url
-                ).then(
-                    (r) => r.json()
                 ).catch(
                     // Handle errors, like not being able to reach the host.
+                    // I guess just log it for now, I'll figure something out later.
                     (error) => {
-                        
+                        console.error(error);
+                        return error;
                     }
                 );
 
+                // Construct the stdResponse object
+                let apiResponse = {
+                    status: response.status,
+                    message: `${(response.status < 400? 'success' : 'error')}` + (response.statusText ? `: ${response.statusText}` : ''),
+                    data: await response.json()
+                };
+
+                // Special operations.
+                if (Array.isArray(apiResponse.data)) {
+                    apiResponse.data = apiResponse.data.map(convertToProduct);
+                }
+
+                // Set loading back to false and return the stdResponse object
                 setIsLoading(false);
-                console.log('Search-result', results);
-                return results;
+                return apiResponse;
             },
         },
         isLoading: isLoading,
