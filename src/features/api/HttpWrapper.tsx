@@ -60,9 +60,12 @@ export default function HttpWrapper(props: any): JSX.Element {
 
         if (!products.length) {
             // Load from localstorage.
+            let _products = JSON.parse(localStorage.getItem('staffanshopper_products') ?? '[]');
 
             // Still no products? Load *some* topsellers from API.
-            // api.topsellers();
+            if (!_products.length) {
+                let res = api.topsellers();
+            }
         }
     }, []);
 
@@ -74,22 +77,14 @@ export default function HttpWrapper(props: any): JSX.Element {
                 </div>
             ) : (
                 <Api.Provider value={api}>
-                    {window.innerWidth >= 768 && 
-                        <span className={['Status', 'absolute', 'top-0', 'right-8', 'text-[rgba(128,128,128,0.75)]', 'text-sm', 'select-none'].join(' ')}>
-                            <pre>
-                                {
-                                    (status.health === 'healthy' ? '🟢' : '🔴') + 
-                                    (status.data && status.data.id ? status.data.id : ' No store')
-                                }
-                                {status.health === 'healthy' && (
-                                    <>
-                                        <br/>
-                                        <a href={`${Staffanshopper.grossconfig.HOST}${status.data.url}`}>{`${status.data.address.city}`}</a>
-                                    </>
-                                )}
-                            </pre>
-                        </span>
-                    }
+                    <span className={['Status', 'absolute', 'top-0', 'left-0', 'text-[rgba(128,128,128,0.75)]', 'text-sm', 'select-none', 'z-10'].join(' ')}>
+                        <pre>
+                            {isLoading ? '🟡' : (status.health === 'healthy' ? '🟢' : '🔴')}
+                            {(status.health === 'healthy' && window.innerWidth >= 768) && (
+                                <a href={`${Staffanshopper.grossconfig.HOST}${status.data.url}`}>{` (${status.data.id}) ${status.data.address.city}`}</a>
+                            )}
+                        </pre>
+                    </span>
                     {props.children}
                 </Api.Provider>
             )}

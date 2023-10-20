@@ -20,8 +20,10 @@ export interface ApiProps {
         [key: string]: any /* I don't know how to define variable amount of arguments! :D ({...args}) => Promise<StdResponse<any>> */;
     },
     isLoading: boolean,
+    store: number,
     setStore: React.Dispatch<React.SetStateAction<number>>,
     products: Product[],
+    setProducts: React.Dispatch<React.SetStateAction<Product[]>>
 };
 
 export interface StdResponse<T> {

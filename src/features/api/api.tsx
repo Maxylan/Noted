@@ -161,8 +161,10 @@ const useApiModule = (): ApiProps => {
             },
         },
         isLoading: isLoading,
+        store: store,
         setStore: setStore,
-        products: products
+        products: products,
+        setProducts: setProducts,
     }
 };
 
