@@ -136,7 +136,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                             className={['w-48'].join(' ')}
                             defaultValue={entry.title} />
                     ) : (
-                        <Modal visible={true} setVisibility={() => {updateTitle(); setTitleIsBeingEdited(false);}}>
+                        <Modal visible={true} setVisibility={() => updateTitle()}>
                             <span className='items-center align-center justify-center'>
                                 <input 
                                     type='text' 
@@ -146,7 +146,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                     maxLength={40}
                                     onChange={(e) => {
                                         setTitle(e.target.value);
-                                        
+
                                         if (e.target.value) {
                                             debounce(e.target.value);
                                         }
@@ -158,7 +158,12 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                 {loading ? <img src='/loader.svg' className='w-24 m-auto' alt='Loading..'/> : (
                                 <ul>
                                     {(result && result.data) && result.data.map((product: Product) => 
-                                        <li className={['flex', 'flex-row', 'my-2'].join(' ')} key={product.id}>
+                                        <li data-price={JSON.stringify(product.price)} 
+                                            className={['flex', 'flex-row', 'my-2'].join(' ') + (product.price.promotion && (product.price.promotion as any)?.length > 0 ? ' bg-third' : (product.lowPrice ? ' bg-secondary' : ''))} key={product.id}
+                                            onClick={() => {
+                                                updateEntry('price', product.price.current);
+                                                updateEntry('title', product.name);
+                                            }}>
                                             <div className={['inline-block', 'flex-none', 'flex', 'w-[5rem]', 'h-[5rem]', 'bg-white', 'rounded-md', 'border-highlight', 'border-2', 'mr-2', 'overflow-hidden', 'align-center', 'justify-center', 'items-center'].join(' ')}>
                                                 <img
                                                     className={['max-w-[4rem]', 'max-h-[4rem]'].join(' ')} 
