@@ -242,10 +242,10 @@ const useApiModule = (): ApiProps => {
                 let url = `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/esales/search`;
                 switch(mode) {
                     case 'normal':
-                        url += `/?Q=${query}&page=${page}&store=${use === 'store' ? store : provider}`;
+                        url += `/?Q=${query}&page=${page}&type=product&store=${use === 'store' ? store : provider}`;
                         break;
                     case 'quick':
-                        url += `/?q=${query}&store=${use === 'store' ? store : provider}`;
+                        url += `/?q=${query}&type=product&store=${use === 'store' ? store : provider}`;
                         break;
                 }
 

@@ -158,9 +158,9 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                 {loading ? <img src='/loader.svg' className='w-24 m-auto' alt='Loading..'/> : (
                                 <ul>
                                     {(result && result.data) && result.data.map((product: Product) => 
-                                        <li data-price={JSON.stringify(product.price)} 
-                                            className={['flex', 'flex-row', 'my-2'].join(' ') + (product.price.promotion && (product.price.promotion as any)?.length > 0 ? ' bg-third' : (product.lowPrice ? ' bg-secondary' : ''))} key={product.id}
+                                        <li className={['flex', 'flex-row', 'my-2'].join(' ') + (product.price.promotion && (product.price.promotion as any)?.length > 0 ? ' bg-third' : (product.lowPrice ? ' bg-secondary' : ''))} key={product.id}
                                             onClick={() => {
+                                                updateEntry('image', `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.PICTURE_BASE_URL}/${product.cover.url}`);
                                                 updateEntry('price', product.price.current);
                                                 updateEntry('title', product.name);
                                             }}>
@@ -184,7 +184,10 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                         </Modal>
                     )
                 ) : (
-                    <div className={['inline-block', 'max-w-[12rem]'].join(' ')}>{ entry.title }</div>
+                    <div className={['inline-block', 'max-w-[12rem]', 'flex', 'flex-row'].join(' ')}>
+                        {entry.image && <span className='inline-block'><img src={entry.image} className={['max-w-[2rem]', 'max-h-[2rem]', 'flex-none', 'mr-2'].join(' ')} /></span>}
+                        <span className={'inline-block'}>{entry.title}</span>
+                    </div>
                 )}
             </div>
             <div className={'flex-none'} onClick={editable ? () => setPriceIsBeingEdited(true) : undefined}>
