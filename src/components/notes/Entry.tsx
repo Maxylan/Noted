@@ -145,8 +145,11 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                     className={['inline-block', 'w-48'].join(' ')}
                                     maxLength={40}
                                     onChange={(e) => {
-                                        debounce(e.target.value);
                                         setTitle(e.target.value);
+                                        
+                                        if (e.target.value) {
+                                            debounce(e.target.value);
+                                        }
                                     }}
                                     value={title} />
                                 <DeleteIcon className={['inline-block', 'text-scrap', 'ml-4'].join(' ')} onClick={() => updateEntry(undefined, undefined)}/>
@@ -155,8 +158,20 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                 {loading ? <img src='/loader.svg' className='w-24 m-auto' alt='Loading..'/> : (
                                 <ul>
                                     {(result && result.data) && result.data.map((product: Product) => 
-                                        <li key={product.id}>
-                                            <a href={`${Staffanshopper.grossconfig.HOST}${product.url}`} target='_blank' rel='noreferrer'>{`${product.name} - ${product.price.current}:-`}</a>
+                                        <li className={['flex', 'flex-row', 'my-2'].join(' ')} key={product.id}>
+                                            <div className={['inline-block', 'flex-none', 'flex', 'w-[5rem]', 'h-[5rem]', 'bg-white', 'rounded-md', 'border-highlight', 'border-2', 'mr-2', 'overflow-hidden', 'align-center', 'justify-center', 'items-center'].join(' ')}>
+                                                <img
+                                                    className={['max-w-[4rem]', 'max-h-[4rem]'].join(' ')} 
+                                                    src={`${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.PICTURE_BASE_URL}/${product.cover.url}`} />
+                                            </div>
+                                            <div className={['inline-block'].join()}>
+                                                <span className={['text-base'].join()}>
+                                                    {product.name.length > 50 ? `${product.name.substring(0, 47)}...` : product.name}
+                                                </span>
+                                                <div>
+                                                    {product.price.unit === 'KGM' ? `${product.price.current} / kg` : `${product.price.current}:-`}
+                                                </div>
+                                            </div>
                                         </li>
                                     )}
                                 </ul>)}
