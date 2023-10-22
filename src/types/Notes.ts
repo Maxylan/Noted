@@ -119,4 +119,8 @@ export interface Entry {
      * Entry price (optional).
      */
     price: number|undefined;
+    /**
+     * Entry price (optional).
+     */
+    amount: number|undefined;
 }
