@@ -52,6 +52,15 @@ $scrap: rgb(244 63 94);
 }
 
 body {
-    background-color: rgb(227, 206, 180);
     color: rgb(80, 69, 56);
+    background-color: rgb(250, 226, 198);
+    @media (min-width: 768px) {
+        background-color: rgb(227, 206, 180);
+    }
 }
+/*
+body {
+    color: rgb(80, 69, 56);
+    background-color: rgb(227, 206, 180);
+}
+*/

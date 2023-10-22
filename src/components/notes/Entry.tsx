@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
+import Settings from '../../features/settings';
 import { useApi, useAuthorization, useDebounce } from '../../features/api/HttpWrapper';
 import { isGroup } from "../../utils/helpers";
 import { 
@@ -161,13 +162,15 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                         <li className={['flex', 'flex-row', 'my-2'].join(' ') + (product.price.promotion && (product.price.promotion as any)?.length > 0 ? ' bg-third' : (product.lowPrice ? ' bg-secondary' : ''))} key={product.id}
                                             onClick={() => {
                                                 updateEntry('image', `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.PICTURE_BASE_URL}/${product.cover.url}`);
+                                                updateEntry('imageAlt', product.cover.alt);
                                                 updateEntry('price', product.price.current);
                                                 updateEntry('title', product.name);
                                             }}>
                                             <div className={['inline-block', 'flex-none', 'flex', 'w-[5rem]', 'h-[5rem]', 'bg-white', 'rounded-md', 'border-highlight', 'border-2', 'mr-2', 'overflow-hidden', 'align-center', 'justify-center', 'items-center'].join(' ')}>
                                                 <img
-                                                    className={['max-w-[4rem]', 'max-h-[4rem]'].join(' ')} 
-                                                    src={`${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.PICTURE_BASE_URL}/${product.cover.url}`} />
+                                                    alt={product.cover.alt} 
+                                                    src={`${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.PICTURE_BASE_URL}/${product.cover.url}`}
+                                                    className={['max-w-[4rem]', 'max-h-[4rem]'].join(' ')} />
                                             </div>
                                             <div className={['inline-block'].join()}>
                                                 <span className={['text-base'].join()}>
@@ -185,7 +188,11 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                     )
                 ) : (
                     <div className={['inline-block', 'max-w-[12rem]', 'flex', 'flex-row'].join(' ')}>
-                        {entry.image && <span className='inline-block'><img src={entry.image} className={['max-w-[2rem]', 'max-h-[2rem]', 'flex-none', 'mr-2'].join(' ')} /></span>}
+                        {(Settings.showImages() && entry.image) && (
+                            <span className='inline-block'>
+                                <img src={entry.image} alt={entry.imageAlt} className={['max-w-[2rem]', 'max-h-[2rem]', 'flex-none', 'mr-2'].join(' ')} />
+                            </span>
+                        )}
                         <span className={'inline-block'}>{entry.title}</span>
                     </div>
                 )}

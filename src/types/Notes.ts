@@ -108,6 +108,10 @@ export interface Entry {
      */
     image: string|undefined;
     /**
+     * Entry image alt (optional).
+     */
+    imageAlt: string|undefined;
+    /**
      * Entry price (optional).
      */
     price: number|undefined;

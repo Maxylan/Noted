@@ -3,14 +3,23 @@ export default class Settings {
 
     }
     private static getSetting = (key: string): any => {
+        let value = localStorage.getItem(`staffanshopper_${key}`);
+        return value && JSON.parse(value);
+    };
 
-    }
-
-    public static debugEnabled = () => this.debug();
+    public static debugEnabled = () => Settings.debug();
     public static debug = (set: boolean|undefined = undefined): boolean => {
         if (typeof set !== 'undefined') {
             Settings.updateSetting('debug', set);
         }
         return Settings.getSetting('debug') ?? false;
+    }
+
+    public static showImages = (set: boolean|undefined = undefined) => Settings.images(set);
+    public static images = (set: boolean|undefined = undefined): boolean => {
+        if (typeof set !== 'undefined') {
+            Settings.updateSetting('images', set);
+        }
+        return Settings.getSetting('images') ?? false;
     }
 }

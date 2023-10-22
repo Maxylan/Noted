@@ -125,7 +125,7 @@ export default function HttpWrapper(props: any): JSX.Element {
                 </div>
             ) : (
                 <Api.Provider value={api}>
-                    <span className={['Status', 'absolute', 'top-0', 'left-0', 'text-[rgba(128,128,128,0.75)]', 'text-sm', 'select-none', 'z-10'].join(' ')}>
+                    <span className={['Status', 'fixed', 'top-0', 'left-0', 'text-[rgba(128,128,128,0.75)]', 'text-sm', 'select-none', 'z-10'].join(' ')}>
                         <pre>
                             {isLoading ? '🟡' : (status.health === 'healthy' ? '🟢' : '🔴')}
                             {(status.health === 'healthy' && window.innerWidth >= 768) && (
