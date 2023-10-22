@@ -197,7 +197,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                                     id='amountInput'
                                                     ref={amountInputRef}
                                                     type='number' 
-                                                    defaultValue={amountBeingEdited.amount} 
+                                                    defaultValue={amountBeingEdited.amount || 1} 
                                                     className={['w-16'].join(' ')} />
                                                 {amountBeingEdited.unit === 'KGM' ? 'KG' : ''}
                                             </span>
