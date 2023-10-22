@@ -120,7 +120,11 @@ export interface Entry {
      */
     price: number|undefined;
     /**
-     * Entry price (optional).
+     * Price unit (optional).
+     */
+    unit: string|undefined;
+    /**
+     * Amount of items (optional).
      */
     amount: number|undefined;
 }

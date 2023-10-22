@@ -51,6 +51,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
         image: string;
         imageAlt: string;
         price: number;
+        amount: number|undefined;
         unit: string;
         title: string;
     }>(false);
@@ -131,6 +132,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                     updateEntry('imageAlt', amountBeingEdited.imageAlt);
                     updateEntry('amount', (amountInputRef.current.value || 1));
                     updateEntry('price', amountBeingEdited.price);
+                    updateEntry('unit', amountBeingEdited.unit);
                 }
 
                 updateEntry('title', value);
@@ -150,7 +152,20 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
             }
             <div 
                 className={['flex-auto', 'w-full'].join(' ')}
-                onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}>
+                onClick={editable ? () => {
+                    setTitleIsBeingEdited(true); 
+                    if (entry.pid) {
+                        setAmountBeingEdited({
+                            pid: entry.pid,
+                            image: entry.image!,
+                            imageAlt: entry.imageAlt!,
+                            price: entry.price!,
+                            amount: entry.amount!,
+                            unit: entry.unit!,
+                            title: entry.title,
+                        });
+                    }
+                } : undefined}>
                 {titleIsBeingEdited ? (
                     status.health === 'healthy' ? (
                         <Modal visible={true} setVisibility={() => update()}>
@@ -182,7 +197,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                                     id='amountInput'
                                                     ref={amountInputRef}
                                                     type='number' 
-                                                    defaultValue='1' 
+                                                    defaultValue={amountBeingEdited.amount} 
                                                     className={['w-16'].join(' ')} />
                                                 {amountBeingEdited.unit === 'KGM' ? 'KG' : ''}
                                             </span>
@@ -200,6 +215,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                                         imageAlt: product.cover.alt,
                                                         price: product.price.current,
                                                         unit: product.price.unit,
+                                                        amount: undefined,
                                                         title: product.name,
                                                     });
                                                 }}>
