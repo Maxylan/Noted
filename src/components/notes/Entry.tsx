@@ -105,6 +105,11 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
 
         setTimeout(() => {
             let value = (e.target as HTMLInputElement).value;
+            if (value !== entry.title && entry.pid) {
+                updateEntry('pid', 'deleteValueIfPresent');
+                updateEntry('image', 'deleteValueIfPresent');
+                updateEntry('imageAlt', 'deleteValueIfPresent');
+            }
 
             // if (e.target.value.length <= 40) {
             if (value && value.length <= 40) {
@@ -148,7 +153,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                     onChange={(e) => {
                                         setTitle(e.target.value);
 
-                                        if (e.target.value) {
+                                        if (e.target.value && status.health === 'healthy') {
                                             debounce(e.target.value);
                                         }
                                     }}
@@ -161,6 +166,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                     {(result && result.data) && result.data.map((product: Product) => 
                                         <li className={['flex', 'flex-row', 'my-2'].join(' ') + (product.price.promotion && (product.price.promotion as any)?.length > 0 ? ' bg-third' : (product.lowPrice ? ' bg-secondary' : ''))} key={product.id}
                                             onClick={() => {
+                                                updateEntry('pid', product.id);
                                                 updateEntry('image', `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.PICTURE_BASE_URL}/${product.cover.url}`);
                                                 updateEntry('imageAlt', product.cover.alt);
                                                 updateEntry('price', product.price.current);
