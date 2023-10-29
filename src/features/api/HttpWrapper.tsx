@@ -129,7 +129,7 @@ export default function HttpWrapper(props: any): JSX.Element {
                     <span className={['Status', 'fixed', 'top-0', 'left-0', 'text-[rgba(128,128,128,0.75)]', 'text-sm', 'select-none', 'z-10'].join(' ')}>
                         <pre>
                             {isLoading ? '🟡' : (status.health === 'healthy' ? '🟢' : '🔴')}
-                            {(status.health === 'healthy' && window.innerWidth >= 768) && (
+                            {(status.health === 'healthy' && status.store && status.store.url && window.innerWidth >= 768) && (
                                 <a href={`${Staffanshopper.grossconfig.HOST}${status.store.url}`} target='_blank' rel='noreferrer'>{` (${status.store.id}/${status.provider.storeNumber}) ${status.store.address.city}`}</a>
                             )}
                         </pre>
