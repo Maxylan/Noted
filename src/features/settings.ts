@@ -1,13 +1,13 @@
 export default class Settings {
     private static updateSetting = (key: string, value: any): void => {
-
+        localStorage.setItem(`staffanshopper_${key}`, JSON.stringify(value));
     }
     private static getSetting = (key: string): any => {
         let value = localStorage.getItem(`staffanshopper_${key}`);
         return value && JSON.parse(value);
     };
 
-    public static debugEnabled = () => Settings.debug();
+    public static debugEnabled = (set: boolean|undefined = undefined) => Settings.debug(set);
     public static debug = (set: boolean|undefined = undefined): boolean => {
         if (typeof set !== 'undefined') {
             Settings.updateSetting('debug', set);
