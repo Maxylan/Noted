@@ -27,6 +27,8 @@ import HouseIcon from '@mui/icons-material/House';
  * @returns 
  */
 export default function SettingsPage(): JSX.Element {
+    const [cityRequiresReloadNotice, setCityRequiresReloadNotice] = useState<boolean>(false);
+
     useEffect(() => {
     }, []);
 
@@ -43,8 +45,28 @@ export default function SettingsPage(): JSX.Element {
                             type={'checkbox'} 
                             className={['m-2', 'ml-auto', 'border-text'].join(' ')}
                             defaultChecked={Settings.debugEnabled()}
-                            onChange={(r) => Settings.debugEnabled(r.target.checked)}/>
+                            onChange={(e) => Settings.debugEnabled(e.target.checked)}/>
                     </div>
+                    <div className={['w-full', 'mt-2', 'text-xl', 'flex', 'bg-secondary', 'shadow-sm', 'rounded-lg'].join(' ')}>
+                        <div className={['m-2', 'flex-1', 'border-text'].join(' ')}>
+                            <span>City:</span>
+                        </div>
+                        <input 
+                            type={'text'} 
+                            className={['m-2', 'ml-auto', 'border-text'].join(' ')} 
+                            defaultValue={Settings.city()}
+                            onChange={(e) => {
+                                if (!cityRequiresReloadNotice) {
+                                    setCityRequiresReloadNotice(true);
+                                }
+                                Settings.city(e.target.value);
+                            }}/>
+                    </div>
+                    {cityRequiresReloadNotice && (
+                        <div className={['bg-third', 'w-3/4', 'px-2', 'my-2', 'mx-auto', 'rounded-md', 'shadow-sm'].join(' ')}>
+                            <span className={['text-highlight', 'text-base'].join(' ')}>Changing cities requires a page reload to have an effect.</span>
+                        </div>
+                    )}
                     <div className={['w-full', 'mt-2', 'text-xl', 'flex', 'bg-secondary', 'shadow-sm', 'rounded-lg'].join(' ')}>
                         <div className={['m-2', 'flex-1', 'border-text'].join(' ')}>
                             <span>Show images:</span>
@@ -53,7 +75,7 @@ export default function SettingsPage(): JSX.Element {
                             type={'checkbox'} 
                             className={['m-2', 'ml-auto', 'border-text'].join(' ')} 
                             defaultChecked={Settings.showImages()}
-                            onChange={(r) => Settings.showImages(r.target.checked)}/>
+                            onChange={(e) => Settings.showImages(e.target.checked)}/>
                     </div>
                 </div>
             </div>

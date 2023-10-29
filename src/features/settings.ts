@@ -15,6 +15,13 @@ export default class Settings {
         return Settings.getSetting('debug') ?? false;
     }
 
+    public static city = (set: string|undefined = undefined): string => {
+        if (typeof set !== 'undefined') {
+            Settings.updateSetting('city', set);
+        }
+        return Settings.getSetting('city') ?? 'Staffanstorp';
+    }
+
     public static showImages = (set: boolean|undefined = undefined) => Settings.images(set);
     public static images = (set: boolean|undefined = undefined): boolean => {
         if (typeof set !== 'undefined') {

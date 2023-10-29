@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
 import useApiModule from './api';
+import Settings from '../settings';
 import { 
     ApiProps, AuthorizationStatus,
     Product
@@ -78,7 +79,7 @@ export default function HttpWrapper(props: any): JSX.Element {
 
         // Get the Staffanstorp store!
         if (!status.store) {
-            api.stores('Staffanstorp').then((res: any) => {
+            api.stores(Settings.city()).then((res: any) => {
                 // Determine API Health by result of this request.
                 status.health = (res.status === 'success' || res.status < 300) && res.data ? 'healthy' : 'unhealthy';
 
@@ -98,7 +99,7 @@ export default function HttpWrapper(props: any): JSX.Element {
 
             // Still no products? Load *some* topsellers from API.
             if (!_products.length) {
-                let res = api.topsellers().then((res: any) => {
+                api.topsellers().then((res: any) => {
                     // Determine API Health by result of this request.
                     status.health = (res.status === 'success' || res.status < 300) && res.data ? 'healthy' : 'unhealthy';
                     
