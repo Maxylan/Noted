@@ -100,6 +100,10 @@ export interface Entry {
      */
     title: string;
     /**
+     * Product ID (optional)
+     */
+    pid: string|undefined;
+    /**
      * Does the entry have a checkbox (property exists)? If yes, is it checked?
      */
     checked: boolean|undefined;
@@ -108,7 +112,19 @@ export interface Entry {
      */
     image: string|undefined;
     /**
+     * Entry image alt (optional).
+     */
+    imageAlt: string|undefined;
+    /**
      * Entry price (optional).
      */
     price: number|undefined;
+    /**
+     * Price unit (optional).
+     */
+    unit: string|undefined;
+    /**
+     * Amount of items (optional).
+     */
+    amount: number|undefined;
 }

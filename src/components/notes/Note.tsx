@@ -111,8 +111,8 @@ export default function Note(props: NoteProps): JSX.Element {
                 }
             </div>
             <div className={['NoteBody', 'text-xl', 'px-4', 'py-2', 'bg-secondary', 'rounded-lg', 'shadow-inner', 'shadow-inner-lg'].join(' ')}>
-                {props.note.entries.map((entry: GroupType|EntryType, i) => {
-                    // Determine if entry is a group, or a regular entry.s
+                {props.note.entries.map((entry: GroupType|EntryType, i, a) => {
+                    // Determine if entry is a group, or a regular entry.
                     return isGroup(entry) ? (
                         <Group 
                             key={generateUUID()} 
@@ -121,12 +121,14 @@ export default function Note(props: NoteProps): JSX.Element {
                             index={i} 
                             setEntries={props.setEntries} />
                     ) : (
-                        <Entry 
-                            key={generateUUID()} 
-                            entry={entry as EntryType}
-                            editable={props.note.editable}
-                            index={[i, 0]}
-                            setEntries={props.setEntries} />
+                        <div className={(i < a.length - 1 ? ['border-primary', 'border-b-2', 'border-dotted', 'my-1'].join(' ') : '') as string}>
+                            <Entry 
+                                key={generateUUID()} 
+                                entry={entry as EntryType}
+                                editable={props.note.editable}
+                                index={[i, 0]}
+                                setEntries={props.setEntries} />
+                        </div>
                     );
                 })}
                 {props.note.editable && <CreateEntrySelection index={props.note.entries.length} setEntries={props.setEntries} />}

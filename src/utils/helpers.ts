@@ -56,13 +56,17 @@ export const hasChecked = (a: (Entry|Group)[]): boolean => a.some((e: Entry|Grou
     }
 });
 
+export const round = (num: number, decimals: number = 2): number => {
+    return Math.round((num + Number.EPSILON) * (10 ^ decimals)) / (10 ^ decimals);
+}
+
 export const reduceEntries = (entries: (Group|Entry)[]): number => {
-    return entries.reduce((acc, entry) => {
+    return round(entries.reduce((acc, entry) => {
         if (entry.hasOwnProperty('entries')) {
             return acc + reduceEntries((entry as Group).entries);
         }
         return acc + ((entry as Entry).price ?? 0);
-    }, 0);
+    }, 0));
 }
 
 export const reduceGroupEntries = (entries: (Group|Entry)[]): number => {

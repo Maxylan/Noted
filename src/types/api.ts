@@ -7,12 +7,14 @@
 export interface AuthorizationStatus {
     /** Is host reachable? */
     health: 'healthy' | 'unhealthy' | 'unknown';
-    /** Logged-in / Not Logged-in */
+    /** TODO! Logged-in / Not Logged-in */
     status: 'unauthorized' | 'authorized';
-    /** Username */
+    /** TODO! Username */
     username: string;
-    /** TODO! Auth-data */
-    data: any // TODO: Define type.
+    /** Store Provider! Used in API-Calls */
+    provider: any // TODO: Define type.
+    /** Store! */
+    store: any // TODO: Define type.
 }
 
 export interface ApiProps {
@@ -39,6 +41,7 @@ export interface Product {
     name: string;
     brand: string;
     url: string;
+    id: string;
     category: {
         category: string;
         super: string;

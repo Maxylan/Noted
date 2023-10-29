@@ -25,7 +25,7 @@ function App() {
       <HttpWrapper>
         <Menu />
       </HttpWrapper>
-      <p className={['Credit', 'absolute', 'bottom-0', 'right-8', 'text-[rgba(128,128,128,0.75)]', 'text-sm', 'italic'].join(' ')}>
+      <p className={['Credit', 'fixed', 'bottom-0', 'right-8', 'text-[rgba(128,128,128,0.75)]', 'text-sm', 'italic'].join(' ')}>
           By <a href='https://github.com/Maxylan' target='_blank' rel='noreferrer'>Maxylan</a>
       </p>
     </div>
