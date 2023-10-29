@@ -29,7 +29,7 @@ export default function Menu(): JSX.Element {
 
     return (
         <>
-            <div className={['Menu', 'bg-primary', 'relative', 'p-4', 'flex', 'w-full'/*, 'h-full'*/, 'overflow-auto', 'md:w-[640px]'/*, 'md:h-fit'*/, 'h-fit', 'm-auto', 'md:shadow-lg', 'md:rounded', 'justify-center', 'align-center', 'items-center', 'text-center'].join(' ')}>
+            <div className={['Menu', 'bg-primary', 'relative', 'p-4', 'flex', 'w-full'/*, 'h-full'*/, 'md:w-[640px]'/*, 'md:h-fit'*/, 'h-fit', 'm-auto', 'md:shadow-lg', 'md:rounded', 'justify-center', 'align-center', 'items-center', 'text-center'].join(' ')}>
                 {((page) => {
                     switch(page) {
                         case Pages.EditNote: return (
