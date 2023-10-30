@@ -20,10 +20,10 @@ export default function Home(props: any): JSX.Element {
     return (
         <div className={['Home', 'max-w-xs', 'h-full', 'flex', 'flex-col', 'justify-center'].join(' ')}>
             {status.health === 'healthy' ? (
-                <a href={`${Staffanshopper.grossconfig.HOST}${status.store.url}`} target='_blank' rel='noreferrer'>
+                <a href={`${app.grossconfig.HOST}${status.store.url}`} target='_blank' rel='noreferrer'>
                     <img 
                         className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}
-                        src={`${Staffanshopper.grossconfig.HOST}${status.store.mobileImage.url}`} 
+                        src={`${app.grossconfig.HOST}${status.store.mobileImage.url}`} 
                         alt={`Staffanshopper (${status.store.address.city})`} />
                 </a>
             ) : (

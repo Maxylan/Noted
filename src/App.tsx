@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     console.log('Staffanshopper (Max Olsson)');
-    // console.log('Staffanshopper.grossconfig (Extended window object working)', Staffanshopper.grossconfig);
+    // console.log('app.grossconfig (Extended window object working)', app.grossconfig);
   }, []);
 
   return (

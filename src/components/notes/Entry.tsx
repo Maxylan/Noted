@@ -211,7 +211,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                                     setTitle(product.name);
                                                     setAmountBeingEdited({
                                                         pid: product.id,
-                                                        image: `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.PICTURE_BASE_URL}/${product.cover.url}`,
+                                                        image: `${app.grossconfig.HOST}${app.grossconfig.PICTURE_BASE_URL}/${product.cover.url}`,
                                                         imageAlt: product.cover.alt,
                                                         price: product.price.current,
                                                         unit: product.price.unit,
@@ -222,7 +222,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                                 <div className={['inline-block', 'flex-none', 'flex', 'w-[5rem]', 'h-[5rem]', 'bg-white', 'rounded-md', 'border-highlight', 'border-2', 'mr-2', 'overflow-hidden', 'align-center', 'justify-center', 'items-center'].join(' ')}>
                                                     <img
                                                         alt={product.cover.alt} 
-                                                        src={`${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.PICTURE_BASE_URL}/${product.cover.url}`}
+                                                        src={`${app.grossconfig.HOST}${app.grossconfig.PICTURE_BASE_URL}/${product.cover.url}`}
                                                         className={['max-w-[4rem]', 'max-h-[4rem]'].join(' ')} />
                                                 </div>
                                                 <div className={['inline-block'].join()}>

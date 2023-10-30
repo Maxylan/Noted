@@ -19,9 +19,10 @@ declare global {
     readonly staffansconfig: StaffansConfig;
   }
 
-  var Staffanshopper: WindowExtended;
+  var app: WindowExtended;
 }
-global.Staffanshopper = window as any;
+global.app = window as any;
+console.log(app);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

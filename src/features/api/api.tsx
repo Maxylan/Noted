@@ -114,7 +114,7 @@ const useApiModule = (): ApiProps => {
                 else {
                     // Make the fetch.
                     response = await fetch(
-                        `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/sites/11/storeNumber`
+                        `${app.grossconfig.HOST}${app.grossconfig.BASE_URL}/sites/11/storeNumber`
                     ).catch(
                         // Handle errors, like not being able to reach the host.
                         // I guess just log it for now, I'll figure something out later.
@@ -166,7 +166,7 @@ const useApiModule = (): ApiProps => {
                 else {
                     // Make the fetch.
                     response = await fetch(
-                        `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/PageData/stores`
+                        `${app.grossconfig.HOST}${app.grossconfig.BASE_URL}/PageData/stores`
                     ).catch(
                         // Handle errors, like not being able to reach the host.
                         // I guess just log it for now, I'll figure something out later.
@@ -205,7 +205,7 @@ const useApiModule = (): ApiProps => {
                 // Make the fetch.
                 setIsLoading(true);
                 let response = await fetch(
-                    `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/esales/topsellers?page=0&size=33`
+                    `${app.grossconfig.HOST}${app.grossconfig.BASE_URL}/esales/topsellers?page=0&size=33`
                 ).catch(
                     // Handle errors, like not being able to reach the host.
                     // I guess just log it for now, I'll figure something out later.
@@ -239,7 +239,7 @@ const useApiModule = (): ApiProps => {
             search: async (query: string, mode: 'normal'|'quick', page: number = 0, use: 'store'|'provider' = 'provider'): Promise<StdResponse<any>> => {
                 setIsLoading(true);
                 // Construct URL
-                let url = `${Staffanshopper.grossconfig.HOST}${Staffanshopper.grossconfig.BASE_URL}/esales/search`;
+                let url = `${app.grossconfig.HOST}${app.grossconfig.BASE_URL}/esales/search`;
                 switch(mode) {
                     case 'normal':
                         url += `/?Q=${query}&page=${page}&type=product&store=${use === 'store' ? store : provider}`;
