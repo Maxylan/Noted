@@ -1,4 +1,4 @@
-# Staffanshopper
+# Noted
 
 Uhm, a README is todo. It will happen I swear.
 

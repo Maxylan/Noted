@@ -12,16 +12,17 @@ import {
  * @copyright © 2023 Max Olsson
  */
 
-// Create the Staffanshopper global and assign the extended window object to it.
+// Create the Noted global and assign the extended window object to it.
 declare global {
   interface WindowExtended extends Window {
     readonly grossconfig: GrossConfig;
     readonly staffansconfig: StaffansConfig;
   }
 
-  var Staffanshopper: WindowExtended;
+  var app: WindowExtended;
 }
-global.Staffanshopper = window as any;
+global.app = window as any;
+console.log(app);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
