@@ -256,7 +256,14 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                 <img src={entry.image} alt={entry.imageAlt} className={['max-w-[2rem]', 'max-h-[2rem]', 'flex-none', 'mr-2'].join(' ')} />
                             </span>
                         )}
-                        <span className={'inline-block'}>{`${entry.amount ? `(${entry.amount}) ` : ''}${entry.title}`}</span>
+                        <span className={['inline-block'].join(' ') + ' ' + ((text) => {
+                            if (text.split(' ').some((word) => word.length >= 12)) {
+                                return 'text-lg';
+                            }
+                            else {
+                                return 'text-xl';
+                            }
+                        })(entry.title)}>{`${entry.amount ? `(${entry.amount}${entry.unit === 'KGM' ? ' kg' : ''}) ` : ''}${entry.title}`}</span>
                     </div>
                 )}
             </div>
