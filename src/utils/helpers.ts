@@ -57,7 +57,7 @@ export const hasChecked = (a: (Entry|Group)[]): boolean => a.some((e: Entry|Grou
 });
 
 export const round = (num: number, decimals: number = 2): number => {
-    return Math.round((num + Number.EPSILON) * (10 ^ decimals)) / (10 ^ decimals);
+    return num /* Math.round((num + Number.EPSILON) * (10 ^ decimals)) / (10 ^ decimals) */;
 }
 
 export const reduceEntries = (entries: (Group|Entry)[]): number => {
