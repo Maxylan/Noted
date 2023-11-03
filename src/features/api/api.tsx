@@ -100,7 +100,7 @@ const useApiModule = (): ApiProps => {
             provider: async (): Promise<StdResponse<any>> => {
                 setIsLoading(true);
                 let response, apiResponse;
-                let data = sessionStorage.getItem('staffanshopper_provider');
+                let data = sessionStorage.getItem('noted_provider');
                 data = data ? JSON.parse(data) : null;
                 
                 if (data) {
@@ -125,7 +125,7 @@ const useApiModule = (): ApiProps => {
                     );
 
                     data = await response.json();
-                    sessionStorage.setItem('staffanshopper_provider', JSON.stringify(data));
+                    sessionStorage.setItem('noted_provider', JSON.stringify(data));
 
                     // Construct the stdResponse object
                     apiResponse = {
@@ -152,7 +152,7 @@ const useApiModule = (): ApiProps => {
             stores: async (storeToFind: string|undefined = undefined): Promise<StdResponse<any>> => {
                 setIsLoading(true);
                 let response, apiResponse;
-                let data = sessionStorage.getItem('staffanshopper_stores');
+                let data = sessionStorage.getItem('noted_stores');
                 data = data ? JSON.parse(data) : null;
                 
                 if (data) {
@@ -177,7 +177,7 @@ const useApiModule = (): ApiProps => {
                     );
 
                     data = await response.json();
-                    sessionStorage.setItem('staffanshopper_stores', JSON.stringify(data));
+                    sessionStorage.setItem('noted_stores', JSON.stringify(data));
 
                     // Construct the stdResponse object
                     apiResponse = {

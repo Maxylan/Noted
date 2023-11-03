@@ -56,7 +56,7 @@ export default function HttpWrapper(props: any): JSX.Element {
     const {api, isLoading, setStore, products, setProducts} = useApiModule();
 
     useEffect(() => {
-        // console.log('Staffanshopper.grossconfig (Extended window object working)', Staffanshopper.grossconfig);
+        // console.log('Noted.grossconfig (Extended window object working)', Noted.grossconfig);
 
         if (!status.provider || status.health === 'unknown') {
             // Get the Staffanstorp store provider. This'll also ensure that the API is healthy. Two birds one stone baby.
@@ -95,7 +95,7 @@ export default function HttpWrapper(props: any): JSX.Element {
 
         if (!products.length) {
             // Load from localstorage.
-            let _products = JSON.parse(localStorage.getItem('staffanshopper_products') ?? '[]');
+            let _products = JSON.parse(localStorage.getItem('noted_products') ?? '[]');
 
             // Still no products? Load *some* topsellers from API.
             if (!_products.length) {
@@ -105,7 +105,7 @@ export default function HttpWrapper(props: any): JSX.Element {
                     
                     // Update localStorage on success.
                     if (status.health === 'healthy') {
-                        localStorage.setItem('staffanshopper_products', JSON.stringify(res.data));
+                        localStorage.setItem('noted_products', JSON.stringify(res.data));
                     }
 
                     // console.log('res', res);

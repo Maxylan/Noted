@@ -16,12 +16,12 @@ import Menu from './components/navigation/Menu';
 function App() {
 
   useEffect(() => {
-    console.log('Staffanshopper (Max Olsson)');
+    console.log('Noted (Max Olsson)');
     // console.log('app.grossconfig (Extended window object working)', app.grossconfig);
   }, []);
 
   return (
-    <div className={['Staffanshopper', 'w-screen', 'h-screen', 'text-text', 'flex', 'align-center', 'justify-center'].join(' ')}>
+    <div className={['Noted', 'w-screen', 'h-screen', 'text-text', 'flex', 'align-center', 'justify-center'].join(' ')}>
       <HttpWrapper>
         <Menu />
       </HttpWrapper>

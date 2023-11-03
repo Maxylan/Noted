@@ -12,7 +12,7 @@ import {
  * @copyright © 2023 Max Olsson
  */
 
-// Create the Staffanshopper global and assign the extended window object to it.
+// Create the Noted global and assign the extended window object to it.
 declare global {
   interface WindowExtended extends Window {
     readonly grossconfig: GrossConfig;

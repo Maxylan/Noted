@@ -1,9 +1,9 @@
 export default class Settings {
     private static updateSetting = (key: string, value: any): void => {
-        localStorage.setItem(`staffanshopper_${key}`, JSON.stringify(value));
+        localStorage.setItem(`noted_${key}`, JSON.stringify(value));
     }
     private static getSetting = (key: string): any => {
-        let value = localStorage.getItem(`staffanshopper_${key}`);
+        let value = localStorage.getItem(`noted_${key}`);
         return value && JSON.parse(value);
     };
 

@@ -8,8 +8,8 @@ import { date, dateKey } from './helpers';
  */
 
 export enum LocalStorageKeys {
-    Notes = 'staffanshopper_notes_', // dateKey() from './helpers' needs to be appended.
-    Settings = 'staffanshopper_settings',
+    Notes = 'noted_notes_', // dateKey() from './helpers' needs to be appended.
+    Settings = 'noted_settings',
 }
 
 // TODO?

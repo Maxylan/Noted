@@ -5,11 +5,11 @@
  */
 
 /**
- * Config used to configure the staffanshopper app.
+ * Config used to configure the noted app.
  */
 const staffansconfig = {
     DEBUG: true,
-    HOST: 'https://staffanshopper.nu',
+    HOST: 'https://noted.nu',
     PORT: ':3000',
 }
 

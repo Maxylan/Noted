@@ -24,13 +24,13 @@ export default function Home(props: any): JSX.Element {
                     <img 
                         className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}
                         src={`${app.grossconfig.HOST}${status.store.mobileImage.url}`} 
-                        alt={`Staffanshopper (${status.store.address.city})`} />
+                        alt={`Noted (${status.store.address.city})`} />
                 </a>
             ) : (
                 <img 
                     className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}
                     src='https://placehold.co/600x400' 
-                    alt='Staffanshopper' />
+                    alt='Noted' />
             )}
             
             {props.note.entries.length > 0 && 
