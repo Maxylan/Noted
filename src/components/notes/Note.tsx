@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useAuthorization } from '../../features/api/HttpWrapper';
 import { 
     generateUUID, 
     isGroup, 
@@ -18,6 +19,7 @@ import {
 import Group from './Group';
 import Entry from './Entry';
 import CreateEntrySelection from './CreateEntrySelection';
+import Settings from '../../features/settings';
 import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
 /**
@@ -46,13 +48,14 @@ export const useNoteProps = (_note: NoteType = defaultNote()): NoteProps => {
     const [editable, setEditable] = useState<boolean>(_note.editable);
     const [entries, setEntries] = useState<(EntryType|GroupType)[]>(_note.entries);
     const noteRef = useRef<NoteType>(_note);
+    const status = useAuthorization();
     const note = {
         id: noteRef.current.id,
         title: title, 
         created: noteRef.current.created, 
         updated: updated, 
         editable: editable,
-        debug: noteRef.current.debug, 
+        city: status?.store?.name ?? Settings.city(), 
         entries: entries
     };
 
@@ -145,13 +148,13 @@ export default function Note(props: NoteProps): JSX.Element {
                     }
                 </div>
             </div>
-            <div className={['NoteDebug', 'mt-8'].join(' ')}>
-                {props.note.debug && (
+            {Settings.debug() && (
+                <div className={['NoteDebug', 'mt-8'].join(' ')}>
                     <pre className={['text-sm', 'bg-white', 'p-4', 'rounded-lg', 'shadow-inner', 'shadow-inner-lg', 'overflow-scroll'].join(' ')}>
                         {JSON.stringify(props.note, null, 2)}
                     </pre>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     )
 } 

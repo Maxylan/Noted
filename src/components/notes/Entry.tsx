@@ -175,6 +175,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                     id={'titleInput'}
                                     ref={titleInputRef}
                                     className={['inline-block', 'w-48'].join(' ')}
+                                    autoComplete='off'
                                     maxLength={40}
                                     onChange={(e) => {
                                         setTitle(e.target.value);
@@ -252,7 +253,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                             type='text' 
                             maxLength={40}
                             className={['w-48'].join(' ')}
-                            defaultValue={entry.title} />
+                            defaultValue={entry.title === 'New Entry' ? '' : entry.title} />
                     )
                 ) : (
                     <div className={['inline-block', 'max-w-[12rem]', 'flex', 'flex-row'].join(' ')}>

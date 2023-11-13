@@ -13,7 +13,7 @@ export const defaultNote = (): Note => ({
     created: Date.now(),
     updated: Date.now(),
     editable: true,
-    debug: Settings.debugEnabled(),
+    city: 'offline',
     entries: [/*
         {
             title: 'Test Entry 1',
@@ -64,9 +64,9 @@ export interface Note {
      */
     editable: boolean;
     /**
-     * Display debug details?
+     * What city was configured to be used during the notes creation?
      */
-    debug: boolean;
+    city: string|'offline';
     /**
      * All entires in the note.
      * Each entry represents a row in the note.
