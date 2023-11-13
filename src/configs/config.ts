@@ -19,8 +19,8 @@ export interface GrossConfig {
     USE_RECAPTCHA: undefined,
 }
 
-export interface StaffansConfig {
+export interface NotedConfig {
     DEBUG: boolean,
     HOST: string,
-    PORT: string
+    PATH: string
 }

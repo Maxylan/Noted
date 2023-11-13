@@ -7,10 +7,10 @@
 /**
  * Config used to configure the noted app.
  */
-const staffansconfig = {
+const noted = {
     DEBUG: true,
-    HOST: 'https://noted.nu',
-    PORT: ':3000',
+    HOST: 'https://rmo.com.se',
+    PATH: '/noted',
 }
 
-window.staffansconfig = staffansconfig;
+window.noted = noted;

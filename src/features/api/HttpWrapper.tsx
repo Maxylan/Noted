@@ -86,8 +86,8 @@ export default function HttpWrapper(props: any): JSX.Element {
                 if ((res.status === 'success' || res.status < 300) && res.data) {
                     // status.health === 'healthy'
                     // Set storedata as status.data and its ID.
-                    setStatus(s => ({...s, health: 'healthy', store: res?.data, id: res?.data?.id}));
-                    setStore(status.store.id);
+                    setStatus(s => ({...s, health: 'healthy', store: res?.data}));
+                    setStore(res?.data?.id);
                 }
                 else {
                     setStatus(s => ({...s, health: 'unhealthy'}));

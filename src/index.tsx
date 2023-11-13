@@ -4,7 +4,7 @@ import reportWebVitals from './features/reportWebVitals';
 import App from './App';
 import { 
   GrossConfig, 
-  StaffansConfig 
+  NotedConfig 
 } from './configs/config';
 /**
  * @license     MIT License
@@ -16,7 +16,7 @@ import {
 declare global {
   interface WindowExtended extends Window {
     readonly grossconfig: GrossConfig;
-    readonly staffansconfig: StaffansConfig;
+    readonly noted: NotedConfig;
   }
 
   var app: WindowExtended;
