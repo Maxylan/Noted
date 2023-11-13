@@ -81,15 +81,17 @@ export default function HttpWrapper(props: any): JSX.Element {
         if (!status.store) {
             api.stores(Settings.city()).then((res: any) => {
                 // Determine API Health by result of this request.
-                status.health = (res.status === 'success' || res.status < 300) && res.data ? 'healthy' : 'unhealthy';
-
-                // Set storedata as status.data and its ID in setStore on success.
-                status.store = res.data;
-                if (status.health === 'healthy') {
-                    setStore(status.store.id);
-                }
-
                 // console.log('res', res);
+
+                if ((res.status === 'success' || res.status < 300) && res.data) {
+                    // status.health === 'healthy'
+                    // Set storedata as status.data and its ID.
+                    setStatus(s => ({...s, health: 'healthy', store: res?.data}));
+                    setStore(res?.data?.id);
+                }
+                else {
+                    setStatus(s => ({...s, health: 'unhealthy'}));
+                }
             });
         }
 
@@ -101,14 +103,17 @@ export default function HttpWrapper(props: any): JSX.Element {
             if (!_products.length) {
                 api.topsellers().then((res: any) => {
                     // Determine API Health by result of this request.
-                    status.health = (res.status === 'success' || res.status < 300) && res.data ? 'healthy' : 'unhealthy';
+                    // console.log('res', res);
                     
-                    // Update localStorage on success.
-                    if (status.health === 'healthy') {
+                    if ((res.status === 'success' || res.status < 300) && res.data) {
+                        // status.health === 'healthy'
+                        // Update localStorage on success.
+                        setStatus(s => ({...s, health: 'healthy'}));
                         localStorage.setItem('noted_products', JSON.stringify(res.data));
                     }
-
-                    // console.log('res', res);
+                    else {
+                        setStatus(s => ({...s, health: 'unhealthy'}));
+                    }
                 });
             }
             else {

@@ -175,6 +175,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                     id={'titleInput'}
                                     ref={titleInputRef}
                                     className={['inline-block', 'w-48'].join(' ')}
+                                    autoComplete='off'
                                     maxLength={40}
                                     onChange={(e) => {
                                         setTitle(e.target.value);
@@ -184,7 +185,12 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                             debounce(e.target.value);
                                         }
                                     }}
-                                    value={title} />
+                                    value={title}
+                                    onFocus={(e: React.FocusEvent<HTMLInputElement, Element>) => setTimeout(() => {
+                                        if (e.target.value === 'New Entry') {
+                                            console.log('event', e); e.target.value = ''
+                                        }
+                                    }, 10)} />
                                 <DeleteIcon className={['inline-block', 'text-scrap', 'ml-4'].join(' ')} onClick={() => updateEntry(undefined, undefined)}/>
                             </span>
                             <div className={['max-h-96', 'overflow-auto'].join(' ')}>
@@ -203,7 +209,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                             </span>
                                         </label>
                                     </div>
-                                ) : loading ? <img src='/loader.svg' className='w-24 m-auto' alt='Loading..'/> : (
+                                ) : loading ? <img src={`${app.noted.HOST}${app.noted.PATH}/loader.svg`} className='w-24 m-auto' alt='Loading..'/> : (
                                     <ul>
                                         {(result && result.data) && result.data.map((product: Product) => 
                                             <li className={['flex', 'flex-row', 'my-2'].join(' ') + (product.price.promotion && (product.price.promotion as any)?.length > 0 ? ' bg-third' : (product.lowPrice ? ' bg-secondary' : ''))} key={product.id}
@@ -247,7 +253,7 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                             type='text' 
                             maxLength={40}
                             className={['w-48'].join(' ')}
-                            defaultValue={entry.title} />
+                            defaultValue={entry.title === 'New Entry' ? '' : entry.title} />
                     )
                 ) : (
                     <div className={['inline-block', 'max-w-[12rem]', 'flex', 'flex-row'].join(' ')}>
@@ -256,7 +262,14 @@ export default function Entry({entry, editable, index, setEntries}: EntryProps):
                                 <img src={entry.image} alt={entry.imageAlt} className={['max-w-[2rem]', 'max-h-[2rem]', 'flex-none', 'mr-2'].join(' ')} />
                             </span>
                         )}
-                        <span className={'inline-block'}>{`${entry.amount ? `(${entry.amount}) ` : ''}${entry.title}`}</span>
+                        <span className={['inline-block'].join(' ') + ' ' + ((text) => {
+                            if (text.split(' ').some((word) => word.length >= 12)) {
+                                return 'text-lg';
+                            }
+                            else {
+                                return 'text-xl';
+                            }
+                        })(entry.title)}>{`${entry.amount ? `(${entry.amount}${entry.unit === 'KGM' ? ' kg' : ''}) ` : ''}${entry.title}`}</span>
                     </div>
                 )}
             </div>

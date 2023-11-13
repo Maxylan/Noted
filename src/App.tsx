@@ -18,6 +18,7 @@ function App() {
   useEffect(() => {
     console.log('Noted (Max Olsson)');
     // console.log('app.grossconfig (Extended window object working)', app.grossconfig);
+    // console.log('app.noted (Extended window object working)', app.noted);
   }, []);
 
   return (

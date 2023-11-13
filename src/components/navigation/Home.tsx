@@ -19,7 +19,7 @@ export default function Home(props: any): JSX.Element {
     const status = useAuthorization();
     return (
         <div className={['Home', 'max-w-xs', 'h-full', 'flex', 'flex-col', 'justify-center'].join(' ')}>
-            {status.health === 'healthy' ? (
+            {status.health === 'healthy' && status.store ? (
                 <a href={`${app.grossconfig.HOST}${status.store.url}`} target='_blank' rel='noreferrer'>
                     <img 
                         className={['max-h-80', 'rounded-lg', 'shadow-md', 'my-8'].join(' ')}

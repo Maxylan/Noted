@@ -65,7 +65,7 @@ export default function Group({group, editable, index, setEntries}: GroupProps):
 
     return (
         <div className={['GroupBody', 'text-xl', 'my-2', 'p-2', 'rounded-lg', 'shadow-sm'].join(' ')} style={{backgroundColor: group.color}}>
-            <div className={['w-full', 'text-2xl'].join(' ')}>
+            <div className={['w-full', 'text-2xl', 'flex'].join(' ')}>
                 <span onClick={editable ? () => setTitleIsBeingEdited(true) : undefined}>
                     {titleIsBeingEdited ? (
                         <input 
@@ -78,12 +78,12 @@ export default function Group({group, editable, index, setEntries}: GroupProps):
                                 setTitleIsBeingEdited(false);
                             }} />) : (
                         <>
-                            <div className={['inline-block', 'max-w-[16rem]'].join(' ')}>{ group.title }</div>
+                            <div className={['inline-block', 'flex-auto', 'max-w-[16rem]'].join(' ')}>{ group.title }</div>
                         </>)
                     }
                 </span>
                 <span 
-                    className={['float-right', 'mr-2'].join(' ')}
+                    className={['flex-none', 'ml-auto', 'mr-2'].join(' ')}
                     onClick={() => setExpanded(old => !old)}>
                     {expanded ? 
                         (<ExpandLessIcon />): 

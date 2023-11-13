@@ -12,7 +12,7 @@ export default class Settings {
         if (typeof set !== 'undefined') {
             Settings.updateSetting('debug', set);
         }
-        return Settings.getSetting('debug') ?? false;
+        return Settings.getSetting('debug') ?? app.noted.DEBUG;
     }
 
     public static city = (set: string|undefined = undefined): string => {
